@@ -1,801 +1,801 @@
-"""
-AquaFrost Discord Bot
-"""
-import os
-import sys
-import discord
-from discord.ext import commands, tasks
-from discord import app_commands
-from datetime import datetime
-import aiohttp
-import json
-import random
+IiIi
+QXF1YUZyb3N0IERpc2NvcmQgQm90
+IiIi
+aW1wb3J0IG9z
+aW1wb3J0IHN5cw==
+aW1wb3J0IGRpc2NvcmQ=
+ZnJvbSBkaXNjb3JkLmV4dCBpbXBvcnQgY29tbWFuZHMsIHRhc2tz
+ZnJvbSBkaXNjb3JkIGltcG9ydCBhcHBfY29tbWFuZHM=
+ZnJvbSBkYXRldGltZSBpbXBvcnQgZGF0ZXRpbWU=
+aW1wb3J0IGFpb2h0dHA=
+aW1wb3J0IGpzb24=
+aW1wb3J0IHJhbmRvbQ==
 
-# ============================================
-# BOT CONFIGURATION
-# ============================================
+IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ==
+IyBCT1QgQ09ORklHVVJBVElPTg==
+IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ==
 
-class Config:
-    PREFIX = "!"
-    TOKEN = os.environ.get("DISCORD_TOKEN", "")
-    DEFAULT_COLOR = 0x00FFFF
-    WEBHOOK_COLOR = 0x00FFF0  # New webhook color
-    
-    # Logging channel
-    LOG_SERVER_ID = 1445061695520116860
-    LOG_CHANNEL_ID = 1454112006180442193
-    
-    # URLs
-    PROJECTS_URL = "https://org.aquafrost.ct.ws/discord/projects.txt"
-    MODDL_URL = "https://org.aquafrost.ct.ws/discord/moddl.txt"
-    
-    # 8-ball responses
-    EIGHTBALL_RESPONSES = [
-        "As I see it, yes",
-        "Yes",
-        "No", 
-        "Very likely",
-        "Not even close",
-        "Maybe",
-        "Very unlikely",
-        "Gino's mom told me yes",
-        "Gino's mom told me no",
-        "Ask again later",
-        "Better not tell you now",
-        "Concentrate and ask again",
-        "Don't count on it",
-        "It is certain",
-        "My sources say no",
-        "Outlook good",
-        "You may rely on it",
-        "Very Doubtful",
-        "Without a doubt"
-    ]
-    
-    if not TOKEN:
-        try:
-            from dotenv import load_dotenv
-            load_dotenv()
-            TOKEN = os.getenv("DISCORD_TOKEN", "")
-        except:
-            pass
+Y2xhc3MgQ29uZmlnOg==
+ICAgIFBSRUZJWCA9ICIhIg==
+ICAgIFRPS0VOID0gb3MuZW52aXJvbi5nZXQoIkRJU0NPUkRfVE9LRU4iLCAiIik=
+ICAgIERFRkFVTFRfQ09MT1IgPSAweDAwRkZGRg==
+ICAgIFdFQkhPT0tfQ09MT1IgPSAweDAwRkZGMCAgIyBOZXcgd2ViaG9vayBjb2xvcg==
+ICAgIA==
+ICAgICMgTG9nZ2luZyBjaGFubmVs
+ICAgIExPR19TRVJWRVJfSUQgPSAxNDQ1MDYxNjk1NTIwMTE2ODYw
+ICAgIExPR19DSEFOTkVMX0lEID0gMTQ1NDExMjAwNjE4MDQ0MjE5Mw==
+ICAgIA==
+ICAgICMgVVJMcw==
+ICAgIFBST0pFQ1RTX1VSTCA9ICJodHRwczovL29yZy5hcXVhZnJvc3QuY3Qud3MvZGlzY29yZC9wcm9qZWN0cy50eHQi
+ICAgIE1PRERMX1VSTCA9ICJodHRwczovL29yZy5hcXVhZnJvc3QuY3Qud3MvZGlzY29yZC9tb2RkbC50eHQi
+ICAgIA==
+ICAgICMgOC1iYWxsIHJlc3BvbnNlcw==
+ICAgIEVJR0hUQkFMTF9SRVNQT05TRVMgPSBb
+ICAgICAgICAiQXMgSSBzZWUgaXQsIHllcyIs
+ICAgICAgICAiWWVzIiw=
+ICAgICAgICAiTm8iLCA=
+ICAgICAgICAiVmVyeSBsaWtlbHkiLA==
+ICAgICAgICAiTm90IGV2ZW4gY2xvc2UiLA==
+ICAgICAgICAiTWF5YmUiLA==
+ICAgICAgICAiVmVyeSB1bmxpa2VseSIs
+ICAgICAgICAiR2lubydzIG1vbSB0b2xkIG1lIHllcyIs
+ICAgICAgICAiR2lubydzIG1vbSB0b2xkIG1lIG5vIiw=
+ICAgICAgICAiQXNrIGFnYWluIGxhdGVyIiw=
+ICAgICAgICAiQmV0dGVyIG5vdCB0ZWxsIHlvdSBub3ciLA==
+ICAgICAgICAiQ29uY2VudHJhdGUgYW5kIGFzayBhZ2FpbiIs
+ICAgICAgICAiRG9uJ3QgY291bnQgb24gaXQiLA==
+ICAgICAgICAiSXQgaXMgY2VydGFpbiIs
+ICAgICAgICAiTXkgc291cmNlcyBzYXkgbm8iLA==
+ICAgICAgICAiT3V0bG9vayBnb29kIiw=
+ICAgICAgICAiWW91IG1heSByZWx5IG9uIGl0Iiw=
+ICAgICAgICAiVmVyeSBEb3VidGZ1bCIs
+ICAgICAgICAiV2l0aG91dCBhIGRvdWJ0Ig==
+ICAgIF0=
+ICAgIA==
+ICAgIGlmIG5vdCBUT0tFTjo=
+ICAgICAgICB0cnk6
+ICAgICAgICAgICAgZnJvbSBkb3RlbnYgaW1wb3J0IGxvYWRfZG90ZW52
+ICAgICAgICAgICAgbG9hZF9kb3RlbnYoKQ==
+ICAgICAgICAgICAgVE9LRU4gPSBvcy5nZXRlbnYoIkRJU0NPUkRfVE9LRU4iLCAiIik=
+ICAgICAgICBleGNlcHQ6
+ICAgICAgICAgICAgcGFzcw==
 
-# ============================================
-# STATUS ROTATION SYSTEM
-# ============================================
+IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ==
+IyBTVEFUVVMgUk9UQVRJT04gU1lTVEVN
+IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ==
 
-class StatusManager:
-    def __init__(self):
-        self.statuses = ["Aqua Client", "Apple Client", "Jet Client", "Loup Client", "Unifix Client"]
-        self.status_modes = [discord.Status.online, discord.Status.idle, discord.Status.dnd]
-        self.current_status_index = 0
-        self.current_mode_index = 0
-    
-    def get_next_status(self):
-        status = self.statuses[self.current_status_index]
-        self.current_status_index = (self.current_status_index + 1) % len(self.statuses)
-        return discord.Game(name=status)
-    
-    def get_next_mode(self):
-        mode = self.status_modes[self.current_mode_index]
-        self.current_mode_index = (self.current_mode_index + 1) % len(self.status_modes)
-        return mode
+Y2xhc3MgU3RhdHVzTWFuYWdlcjo=
+ICAgIGRlZiBfX2luaXRfXyhzZWxmKTo=
+ICAgICAgICBzZWxmLnN0YXR1c2VzID0gWyJBcXVhIENsaWVudCIsICJBcHBsZSBDbGllbnQiLCAiSmV0IENsaWVudCIsICJMb3VwIENsaWVudCIsICJVbmlmaXggQ2xpZW50Il0=
+ICAgICAgICBzZWxmLnN0YXR1c19tb2RlcyA9IFtkaXNjb3JkLlN0YXR1cy5vbmxpbmUsIGRpc2NvcmQuU3RhdHVzLmlkbGUsIGRpc2NvcmQuU3RhdHVzLmRuZF0=
+ICAgICAgICBzZWxmLmN1cnJlbnRfc3RhdHVzX2luZGV4ID0gMA==
+ICAgICAgICBzZWxmLmN1cnJlbnRfbW9kZV9pbmRleCA9IDA=
+ICAgIA==
+ICAgIGRlZiBnZXRfbmV4dF9zdGF0dXMoc2VsZik6
+ICAgICAgICBzdGF0dXMgPSBzZWxmLnN0YXR1c2VzW3NlbGYuY3VycmVudF9zdGF0dXNfaW5kZXhd
+ICAgICAgICBzZWxmLmN1cnJlbnRfc3RhdHVzX2luZGV4ID0gKHNlbGYuY3VycmVudF9zdGF0dXNfaW5kZXggKyAxKSAlIGxlbihzZWxmLnN0YXR1c2VzKQ==
+ICAgICAgICByZXR1cm4gZGlzY29yZC5HYW1lKG5hbWU9c3RhdHVzKQ==
+ICAgIA==
+ICAgIGRlZiBnZXRfbmV4dF9tb2RlKHNlbGYpOg==
+ICAgICAgICBtb2RlID0gc2VsZi5zdGF0dXNfbW9kZXNbc2VsZi5jdXJyZW50X21vZGVfaW5kZXhd
+ICAgICAgICBzZWxmLmN1cnJlbnRfbW9kZV9pbmRleCA9IChzZWxmLmN1cnJlbnRfbW9kZV9pbmRleCArIDEpICUgbGVuKHNlbGYuc3RhdHVzX21vZGVzKQ==
+ICAgICAgICByZXR1cm4gbW9kZQ==
 
-# ============================================
-# MAIN BOT CLASS
-# ============================================
+IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ==
+IyBNQUlOIEJPVCBDTEFTUw==
+IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ==
 
-class AquaFrost(commands.Bot):
-    def __init__(self):
-        intents = discord.Intents.default()
-        intents.message_content = True
-        intents.members = True
-        
-        super().__init__(
-            command_prefix=commands.when_mentioned_or(Config.PREFIX),
-            intents=intents,
-            help_command=None
-        )
-        
-        self.start_time = datetime.utcnow()
-        self.status_manager = StatusManager()
-        self.log_channel = None
-    
-    async def setup_hook(self):
-        print("=" * 50)
-        print("🚀 AquaFrost Bot Starting...")
-        print("=" * 50)
-        await self.load_commands()
-        try:
-            synced = await self.tree.sync()
-            print(f"✅ Synced {len(synced)} commands")
-        except Exception as e:
-            print(f"⚠️ Command sync: {e}")
-    
-    @tasks.loop(seconds=5)
-    async def rotate_playing_status(self):
-        if self.is_ready():
-            activity = self.status_manager.get_next_status()
-            current_mode = self.status_manager.status_modes[self.status_manager.current_mode_index]
-            await self.change_presence(activity=activity, status=current_mode)
-    
-    @tasks.loop(seconds=10)
-    async def rotate_status_mode(self):
-        if self.is_ready():
-            new_mode = self.status_manager.get_next_mode()
-            activity = discord.Game(name=self.status_manager.statuses[self.status_manager.current_status_index])
-            await self.change_presence(activity=activity, status=new_mode)
-    
-    async def log_command(self, interaction: discord.Interaction, command_name: str, args: dict = None):
-        """Log command usage to the logging channel"""
-        try:
-            if not self.log_channel:
-                # Get the logging channel
-                log_server = self.get_guild(Config.LOG_SERVER_ID)
-                if log_server:
-                    self.log_channel = log_server.get_channel(Config.LOG_CHANNEL_ID)
-            
-            if self.log_channel:
-                embed = discord.Embed(
-                    title="📝 Command Executed",
-                    color=0x3498db,
-                    timestamp=datetime.utcnow()
-                )
-                
-                embed.add_field(name="👤 User", value=f"{interaction.user.mention}\nID: {interaction.user.id}", inline=True)
-                embed.add_field(name="🏷️ Command", value=f"`/{command_name}`", inline=True)
-                
-                if interaction.guild:
-                    embed.add_field(name="🛡️ Server", value=f"{interaction.guild.name}\nID: {interaction.guild.id}", inline=True)
-                
-                if args:
-                    args_str = "\n".join([f"`{k}`: {v}" for k, v in args.items()])
-                    embed.add_field(name="📊 Arguments", value=args_str[:500], inline=False)
-                
-                embed.add_field(name="🕐 Time", value=f"<t:{int(datetime.utcnow().timestamp())}:F>", inline=True)
-                
-                await self.log_channel.send(embed=embed)
-                
-        except Exception as e:
-            print(f"⚠️ Failed to log command: {e}")
-    
-    async def fetch_text_content(self, url: str) -> str:
-        """Fetch text content from a URL"""
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=10) as response:
-                    if response.status == 200:
-                        return await response.text()
-                    else:
-                        return None
-        except:
-            return None
-    
-    async def load_commands(self):
-        """Load all bot commands"""
-        
-        # ========== PROJECTS COMMAND ==========
-        
-        @self.tree.command(name="projects", description="AquaFrost's Projects and project links")
-        async def projects(interaction: discord.Interaction):
-            """Show AquaFrost projects"""
-            await interaction.response.defer()
-            
-            # Log the command
-            await self.log_command(interaction, "projects")
-            
-            try:
-                # Fetch projects text
-                projects_content = await self.fetch_text_content(Config.PROJECTS_URL)
-                
-                if projects_content:
-                    # Send the raw text directly
-                    await interaction.followup.send(content=projects_content)
-                else:
-                    embed = discord.Embed(
-                        title="❌ Could Not Fetch Projects",
-                        description=f"Failed to fetch from:\n`{Config.PROJECTS_URL}`",
-                        color=0xFF0000
-                    )
-                    await interaction.followup.send(embed=embed)
-                    
-            except Exception as e:
-                embed = discord.Embed(
-                    title="❌ Error",
-                    description=f"```{str(e)[:200]}```",
-                    color=0xFF0000
-                )
-                await interaction.followup.send(embed=embed)
-        
-        # ========== MOD DOWNLOAD COMMAND ==========
-        
-        @self.tree.command(name="moddl", description="Minecraft Mod Download Link")
-        async def moddl(interaction: discord.Interaction):
-            """Send the raw text file content"""
-            await interaction.response.defer()
-            
-            # Log the command
-            await self.log_command(interaction, "moddl")
-            
-            try:
-                # Fetch moddl text
-                moddl_content = await self.fetch_text_content(Config.MODDL_URL)
-                
-                if moddl_content:
-                    # Send the raw text directly
-                    await interaction.followup.send(content=moddl_content)
-                else:
-                    embed = discord.Embed(
-                        title="❌ Download Failed",
-                        description=f"Failed to fetch from:\n`{Config.MODDL_URL}`",
-                        color=0xFF0000
-                    )
-                    await interaction.followup.send(embed=embed)
-                    
-            except Exception as e:
-                embed = discord.Embed(
-                    title="❌ Error",
-                    description=f"```{str(e)[:200]}```",
-                    color=0xFF0000
-                )
-                await interaction.followup.send(embed=embed)
-        
-        # ========== AVATAR COMMAND ==========
-        
-        @self.tree.command(name="avatar", description="Get a user's avatar")
-        @app_commands.describe(user="User to get avatar from (defaults to yourself)")
-        async def avatar(interaction: discord.Interaction, user: discord.User = None):
-            """Get user avatar"""
-            # Default to command user if no user specified
-            target_user = user or interaction.user
-            
-            # Log the command
-            args = {"user": f"{target_user.name} ({target_user.id})"} if user else {}
-            await self.log_command(interaction, "avatar", args)
-            
-            # Get all avatar sizes
-            avatar_url = target_user.display_avatar.url
-            
-            # Create embed with avatar
-            embed = discord.Embed(
-                title=f"👤 {target_user.name}'s Avatar",
-                color=Config.DEFAULT_COLOR,
-                timestamp=datetime.utcnow()
-            )
-            
-            # Set the avatar as the main image
-            embed.set_image(url=avatar_url)
-            
-            # Add download links for different sizes
-            embed.add_field(
-                name="📥 Download Links",
-                value=f"[256px]({avatar_url.replace('?size=1024', '?size=256')}) | "
-                      f"[512px]({avatar_url.replace('?size=1024', '?size=512')}) | "
-                      f"[1024px]({avatar_url}) | "
-                      f"[2048px]({avatar_url.replace('?size=1024', '?size=2048')})",
-                inline=False
-            )
-            
-            # Add user info
-            embed.add_field(
-                name="👤 User Info",
-                value=f"**Name:** {target_user.mention}\n"
-                      f"**ID:** `{target_user.id}`\n"
-                      f"**Account Created:** <t:{int(target_user.created_at.timestamp())}:R>",
-                inline=True
-            )
-            
-            # Add server join date if applicable
-            if interaction.guild and target_user in interaction.guild.members:
-                member = interaction.guild.get_member(target_user.id)
-                if member and member.joined_at:
-                    embed.add_field(
-                        name="🛡️ Server Info",
-                        value=f"**Joined:** <t:{int(member.joined_at.timestamp())}:R>\n"
-                              f"**Roles:** {len(member.roles) - 1}",
-                        inline=True
-                    )
-            
-            embed.set_footer(text=f"Requested by {interaction.user.name}")
-            
-            await interaction.response.send_message(embed=embed)
-        
-        # ========== 8BALL COMMAND ==========
-        
-        @self.tree.command(name="8ball", description="Ask the magic 8-ball a question")
-        @app_commands.describe(question="Your question for the magic 8-ball")
-        async def eightball(interaction: discord.Interaction, question: str):
-            """Magic 8-ball command"""
-            # Log the command
-            await self.log_command(interaction, "8ball", {"question": question[:100]})
-            
-            # Get random response
-            response = random.choice(Config.EIGHTBALL_RESPONSES)
-            
-            # Determine color based on response type
-            positive_responses = ["yes", "certain", "good", "rely", "doubt", "likely"]
-            negative_responses = ["no", "not", "doubtful", "unlikely"]
-            
-            response_lower = response.lower()
-            color = 0x00FF00  # Default green
-            
-            if any(word in response_lower for word in negative_responses):
-                color = 0xFF0000  # Red for negative
-            elif any(word in response_lower for word in positive_responses):
-                color = 0x00FF00  # Green for positive
-            else:
-                color = 0xFFFF00  # Yellow for neutral
-            
-            # Create embed
-            embed = discord.Embed(
-                title="🎱 The Magic 8-Ball",
-                color=color,
-                timestamp=datetime.utcnow()
-            )
-            
-            embed.add_field(name="❓ Your Question", value=f"```{question}```", inline=False)
-            embed.add_field(name="🎯 Answer", value=f"**{response}**", inline=False)
-            
-            # Add fun emoji based on response
-            if "yes" in response_lower or "certain" in response_lower:
-                emoji = "✅"
-            elif "no" in response_lower or "not" in response_lower:
-                emoji = "❌"
-            elif "maybe" in response_lower or "later" in response_lower:
-                emoji = "🤔"
-            else:
-                emoji = "🎱"
-            
-            embed.set_footer(text=f"{emoji} Asked by {interaction.user.name}")
-            
-            await interaction.response.send_message(embed=embed)
-        
-        # ========== NEW: UPTIME COMMAND ==========
-        
-        @self.tree.command(name="uptime", description="Check how long the bot has been online")
-        async def uptime(interaction: discord.Interaction):
-            """Show bot uptime"""
-            # Log the command
-            await self.log_command(interaction, "uptime")
-            
-            uptime = datetime.utcnow() - self.start_time
-            days = uptime.days
-            hours, remainder = divmod(uptime.seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            
-            # Format uptime string
-            if days > 0:
-                uptime_str = f"{days}d {hours}h {minutes}m {seconds}s"
-            elif hours > 0:
-                uptime_str = f"{hours}h {minutes}m {seconds}s"
-            elif minutes > 0:
-                uptime_str = f"{minutes}m {seconds}s"
-            else:
-                uptime_str = f"{seconds}s"
-            
-            # Create embed
-            embed = discord.Embed(
-                title="⏱️ Bot Uptime",
-                color=Config.DEFAULT_COLOR,
-                timestamp=datetime.utcnow()
-            )
-            
-            embed.add_field(
-                name="📅 Start Time",
-                value=f"<t:{int(self.start_time.timestamp())}:F>\n(<t:{int(self.start_time.timestamp())}:R>)",
-                inline=True
-            )
-            
-            embed.add_field(
-                name="⏳ Current Uptime",
-                value=f"**{uptime_str}**",
-                inline=True
-            )
-            
-            embed.add_field(
-                name="🔄 Status",
-                value=f"Playing: Every 5s\nMode: Every 10s",
-                inline=False
-            )
-            
-            # Add current activity
-            current_client = self.status_manager.statuses[self.status_manager.current_status_index]
-            current_mode = self.status_manager.status_modes[self.status_manager.current_mode_index]
-            
-            mode_emoji = {
-                discord.Status.online: "🟢",
-                discord.Status.idle: "🌙",
-                discord.Status.dnd: "⛔"
-            }
-            
-            embed.add_field(
-                name="🎮 Current Activity",
-                value=f"{mode_emoji.get(current_mode, '⚪')} Playing **{current_client}**",
-                inline=True
-            )
-            
-            embed.set_footer(text=f"Bot started by {self.user.name}")
-            
-            await interaction.response.send_message(embed=embed)
-        
-        # ========== NEW: REFRESH COMMAND (ADMIN ONLY) ==========
-        
-        @app_commands.checks.has_permissions(administrator=True)
-        @self.tree.command(name="refresh", description="[ADMIN] Refresh bot commands")
-        async def refresh(interaction: discord.Interaction):
-            """Refresh bot commands (Admin only)"""
-            await interaction.response.defer(ephemeral=True)
-            
-            # Log the command
-            await self.log_command(interaction, "refresh")
-            
-            try:
-                # Reload commands
-                await self.load_commands()
-                
-                # Sync tree
-                synced = await self.tree.sync()
-                
-                embed = discord.Embed(
-                    title="🔄 Commands Refreshed",
-                    description=f"✅ Successfully synced **{len(synced)}** commands",
-                    color=0x00FF00
-                )
-                
-                # List all commands
-                command_list = []
-                for cmd in self.tree.get_commands():
-                    command_list.append(f"• `/{cmd.name}` - {cmd.description}")
-                
-                if command_list:
-                    embed.add_field(
-                        name="📋 Available Commands",
-                        value="\n".join(command_list[:15]),
-                        inline=False
-                    )
-                
-                await interaction.followup.send(embed=embed, ephemeral=True)
-                
-                # Also send to log channel
-                if self.log_channel:
-                    log_embed = discord.Embed(
-                        title="🔄 Commands Refreshed by Admin",
-                        description=f"**Admin:** {interaction.user.mention}\n**Commands:** {len(synced)} synced",
-                        color=0x3498db,
-                        timestamp=datetime.utcnow()
-                    )
-                    await self.log_channel.send(embed=log_embed)
-                    
-            except Exception as e:
-                error_embed = discord.Embed(
-                    title="❌ Refresh Failed",
-                    description=f"```{str(e)[:200]}```",
-                    color=0xFF0000
-                )
-                await interaction.followup.send(embed=error_embed, ephemeral=True)
-        
-        # ========== NEW: SAY COMMAND (ADMIN ONLY) ==========
-        
-        @app_commands.checks.has_permissions(administrator=True)
-        @self.tree.command(name="say", description="[ADMIN] Make the bot say something")
-        @app_commands.describe(
-            message="Message to send",
-            channel="Channel to send to (defaults to current)"
-        )
-        async def say(interaction: discord.Interaction, message: str, channel: discord.TextChannel = None):
-            """Make the bot say something (Admin only)"""
-            await interaction.response.defer(ephemeral=True)
-            
-            # Log the command
-            args = {
-                "message": message[:100] + "..." if len(message) > 100 else message,
-                "channel": channel.mention if channel else "Current"
-            }
-            await self.log_command(interaction, "say", args)
-            
-            try:
-                # Determine target channel
-                target_channel = channel or interaction.channel
-                
-                # Check if bot has permission to send messages
-                if not target_channel.permissions_for(interaction.guild.me).send_messages:
-                    embed = discord.Embed(
-                        title="❌ Permission Error",
-                        description=f"I don't have permission to send messages in {target_channel.mention}",
-                        color=0xFF0000
-                    )
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-                    return
-                
-                # Send the message
-                await target_channel.send(message)
-                
-                # Send confirmation to admin
-                embed = discord.Embed(
-                    title="✅ Message Sent",
-                    description=f"Message sent to {target_channel.mention}",
-                    color=0x00FF00
-                )
-                embed.add_field(name="📝 Message", value=f"```{message[:500]}```", inline=False)
-                await interaction.followup.send(embed=embed, ephemeral=True)
-                
-            except Exception as e:
-                error_embed = discord.Embed(
-                    title="❌ Failed to Send Message",
-                    description=f"```{str(e)[:200]}```",
-                    color=0xFF0000
-                )
-                await interaction.followup.send(embed=error_embed, ephemeral=True)
-        
-        # ========== NEW: WEBHOOK SAY COMMAND (ADMIN ONLY) ==========
-        
-        @app_commands.checks.has_permissions(administrator=True)
-        @self.tree.command(name="webhook-say", description="[ADMIN] Send a message via webhook (cool style)")
-        @app_commands.describe(
-            message="Message to send",
-            username="Webhook username (defaults to bot name)",
-            channel="Channel to send to"
-        )
-        async def webhook_say(interaction: discord.Interaction, message: str, 
-                            username: str = None, channel: discord.TextChannel = None):
-            """Send message via webhook (Admin only)"""
-            await interaction.response.defer(ephemeral=True)
-            
-            # Log the command
-            args = {
-                "message": message[:100] + "..." if len(message) > 100 else message,
-                "username": username or "Default",
-                "channel": channel.mention if channel else "Current"
-            }
-            await self.log_command(interaction, "webhook-say", args)
-            
-            try:
-                # Determine target channel
-                target_channel = channel or interaction.channel
-                
-                # Check if bot has permission to manage webhooks
-                if not target_channel.permissions_for(interaction.guild.me).manage_webhooks:
-                    embed = discord.Embed(
-                        title="❌ Permission Error",
-                        description=f"I need **Manage Webhooks** permission in {target_channel.mention}",
-                        color=0xFF0000
-                    )
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-                    return
-                
-                # Get or create webhook
-                webhooks = await target_channel.webhooks()
-                webhook = None
-                
-                # Look for existing bot webhook
-                for wh in webhooks:
-                    if wh.user and wh.user.id == self.user.id:
-                        webhook = wh
-                        break
-                
-                # Create new webhook if none exists
-                if not webhook:
-                    webhook = await target_channel.create_webhook(
-                        name="AquaFrost Bot",
-                        reason="Created for webhook-say command"
-                    )
-                
-                # Set default username if not provided
-                webhook_username = username or self.user.name
-                
-                # Send message via webhook
-                await webhook.send(
-                    content=message,
-                    username=webhook_username,
-                    avatar_url=self.user.display_avatar.url,
-                    wait=True
-                )
-                
-                # Create confirmation embed with webhook color
-                embed = discord.Embed(
-                    title="✅ Webhook Message Sent",
-                    description=f"Message sent via webhook to {target_channel.mention}",
-                    color=Config.WEBHOOK_COLOR  # Using the specified color
-                )
-                
-                embed.add_field(name="👤 Webhook Name", value=f"`{webhook_username}`", inline=True)
-                embed.add_field(name="🔗 Webhook URL", value=f"`{webhook.url[:50]}...`", inline=True)
-                embed.add_field(name="📝 Message", value=f"```{message[:300]}```", inline=False)
-                
-                # Add webhook info
-                embed.add_field(
-                    name="🔄 Webhook Info",
-                    value=f"**ID:** `{webhook.id}`\n**Channel:** {webhook.channel.mention}\n**Created:** <t:{int(webhook.created_at.timestamp())}:R>",
-                    inline=True
-                )
-                
-                embed.set_footer(text="Sent via webhook")
-                
-                await interaction.followup.send(embed=embed, ephemeral=True)
-                
-            except Exception as e:
-                error_embed = discord.Embed(
-                    title="❌ Webhook Failed",
-                    description=f"```{str(e)[:200]}```",
-                    color=0xFF0000
-                )
-                await interaction.followup.send(embed=error_embed, ephemeral=True)
-        
-        # ========== UTILITY COMMANDS ==========
-        
-        @self.tree.command(name="ping", description="Check bot latency")
-        async def ping(interaction: discord.Interaction):
-            """Check bot ping"""
-            # Log the command
-            await self.log_command(interaction, "ping")
-            
-            latency = round(self.latency * 1000)
-            embed = discord.Embed(
-                title="🏓 Pong!",
-                description=f"**Latency:** {latency}ms",
-                color=Config.DEFAULT_COLOR
-            )
-            
-            # Add uptime
-            uptime = datetime.utcnow() - self.start_time
-            days = uptime.days
-            hours, remainder = divmod(uptime.seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            
-            if days > 0:
-                uptime_str = f"{days}d {hours}h {minutes}m"
-            else:
-                uptime_str = f"{hours}h {minutes}m {seconds}s"
-            
-            embed.add_field(name="⏱️ Uptime", value=uptime_str, inline=True)
-            embed.add_field(name="📊 Servers", value=len(self.guilds), inline=True)
-            
-            # Add current status
-            current_client = self.status_manager.statuses[self.status_manager.current_status_index]
-            embed.add_field(name="🎮 Status", value=f"Playing {current_client}", inline=True)
-            
-            await interaction.response.send_message(embed=embed)
-        
-        @self.tree.command(name="help", description="Show all commands")
-        async def help_cmd(interaction: discord.Interaction):
-            """Show help menu"""
-            # Log the command
-            await self.log_command(interaction, "help")
-            
-            embed = discord.Embed(
-                title="🛠️ AquaFrost Help Menu",
-                description="Minecraft Client Download Bot",
-                color=Config.DEFAULT_COLOR
-            )
-            
-            commands_list = """
-            **`/ping`**
-            Check bot latency and status
-            
-            **`/uptime`**
-            Check how long the bot has been online
-            
-            **`/projects`**
-            Show AquaFrost's projects and links
-            
-            **`/moddl`**
-            Get Minecraft client download links
-            
-            **`/avatar [@user]`**
-            Get a user's avatar with download links
-            
-            **`/8ball [question]`**
-            Ask the magic 8-ball a question
-            
-            **`/help`**
-            Show this menu
-            """
-            
-            embed.add_field(name="🔧 Public Commands", value=commands_list, inline=False)
-            
-            # Admin commands section
-            admin_commands = """
-            **`/refresh`** ⚠️
-            Refresh bot commands (Admin only)
-            
-            **`/say [message] [channel]`** ⚠️
-            Make bot send a message (Admin only)
-            
-            **`/webhook-say [message] [username] [channel]`** ⚠️
-            Send message via webhook (Admin only)
-            """
-            
-            embed.add_field(name="🛡️ Admin Commands", value=admin_commands, inline=False)
-            
-            # Available clients
-            clients_list = """
-            **Available Clients:**
-            • Aqua Client
-            • Apple Client
-            • Jet Client
-            • Loup Client
-            • Unifix Client
-            """
-            
-            embed.add_field(name="🎮 Clients", value=clients_list, inline=True)
-            
-            # Status info
-            status_info = """
-            **Status Rotation:**
-            • Playing: Every 5s
-            • Online/Idle/DND: Every 10s
-            """
-            
-            embed.add_field(name="🔄 Bot Status", value=status_info, inline=True)
-            
-            embed.set_footer(text="Bot by AquaFrost Team | Admin commands marked with ⚠️")
-            await interaction.response.send_message(embed=embed)
-    
-    async def on_ready(self):
-        """Called when bot is ready"""
-        print(f"\n✅ Logged in as: {self.user}")
-        print(f"🆔 Bot ID: {self.user.id}")
-        print(f"📊 Servers: {len(self.guilds)}")
-        print(f"👥 Users: {len(self.users)}")
-        
-        print(f"\n🔄 Status Rotation Active")
-        print(f"• Playing: Every 5 seconds")
-        print(f"• Mode: Every 10 seconds")
-        
-        # Try to get logging channel
-        try:
-            log_server = self.get_guild(Config.LOG_SERVER_ID)
-            if log_server:
-                self.log_channel = log_server.get_channel(Config.LOG_CHANNEL_ID)
-                if self.log_channel:
-                    print(f"📝 Logging Channel: #{self.log_channel.name} (ID: {self.log_channel.id})")
-                    
-                    # Send startup log
-                    startup_embed = discord.Embed(
-                        title="🚀 Bot Started",
-                        description=f"**Bot:** {self.user.name}\n**ID:** {self.user.id}",
-                        color=0x00FF00,
-                        timestamp=datetime.utcnow()
-                    )
-                    startup_embed.add_field(name="Servers", value=len(self.guilds), inline=True)
-                    startup_embed.add_field(name="Users", value=len(self.users), inline=True)
-                    startup_embed.add_field(name="Commands", value="9 commands loaded", inline=True)
-                    startup_embed.set_footer(text="Command logging active")
-                    
-                    await self.log_channel.send(embed=startup_embed)
-                else:
-                    print(f"⚠️ Log channel not found: {Config.LOG_CHANNEL_ID}")
-            else:
-                print(f"⚠️ Log server not found: {Config.LOG_SERVER_ID}")
-        except Exception as e:
-            print(f"⚠️ Failed to setup logging: {e}")
-        
-        print("\n" + "=" * 50 + "\n")
-        
-        # Start rotation tasks
-        self.rotate_playing_status.start()
-        self.rotate_status_mode.start()
+Y2xhc3MgQXF1YUZyb3N0KGNvbW1hbmRzLkJvdCk6
+ICAgIGRlZiBfX2luaXRfXyhzZWxmKTo=
+ICAgICAgICBpbnRlbnRzID0gZGlzY29yZC5JbnRlbnRzLmRlZmF1bHQoKQ==
+ICAgICAgICBpbnRlbnRzLm1lc3NhZ2VfY29udGVudCA9IFRydWU=
+ICAgICAgICBpbnRlbnRzLm1lbWJlcnMgPSBUcnVl
+ICAgICAgICA=
+ICAgICAgICBzdXBlcigpLl9faW5pdF9fKA==
+ICAgICAgICAgICAgY29tbWFuZF9wcmVmaXg9Y29tbWFuZHMud2hlbl9tZW50aW9uZWRfb3IoQ29uZmlnLlBSRUZJWCks
+ICAgICAgICAgICAgaW50ZW50cz1pbnRlbnRzLA==
+ICAgICAgICAgICAgaGVscF9jb21tYW5kPU5vbmU=
+ICAgICAgICAp
+ICAgICAgICA=
+ICAgICAgICBzZWxmLnN0YXJ0X3RpbWUgPSBkYXRldGltZS51dGNub3coKQ==
+ICAgICAgICBzZWxmLnN0YXR1c19tYW5hZ2VyID0gU3RhdHVzTWFuYWdlcigp
+ICAgICAgICBzZWxmLmxvZ19jaGFubmVsID0gTm9uZQ==
+ICAgIA==
+ICAgIGFzeW5jIGRlZiBzZXR1cF9ob29rKHNlbGYpOg==
+ICAgICAgICBwcmludCgiPSIgKiA1MCk=
+ICAgICAgICBwcmludCgi8J+agCBBcXVhRnJvc3QgQm90IFN0YXJ0aW5nLi4uIik=
+ICAgICAgICBwcmludCgiPSIgKiA1MCk=
+ICAgICAgICBhd2FpdCBzZWxmLmxvYWRfY29tbWFuZHMoKQ==
+ICAgICAgICB0cnk6
+ICAgICAgICAgICAgc3luY2VkID0gYXdhaXQgc2VsZi50cmVlLnN5bmMoKQ==
+ICAgICAgICAgICAgcHJpbnQoZiLinIUgU3luY2VkIHtsZW4oc3luY2VkKX0gY29tbWFuZHMiKQ==
+ICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6
+ICAgICAgICAgICAgcHJpbnQoZiLimqDvuI8gQ29tbWFuZCBzeW5jOiB7ZX0iKQ==
+ICAgIA==
+ICAgIEB0YXNrcy5sb29wKHNlY29uZHM9NSk=
+ICAgIGFzeW5jIGRlZiByb3RhdGVfcGxheWluZ19zdGF0dXMoc2VsZik6
+ICAgICAgICBpZiBzZWxmLmlzX3JlYWR5KCk6
+ICAgICAgICAgICAgYWN0aXZpdHkgPSBzZWxmLnN0YXR1c19tYW5hZ2VyLmdldF9uZXh0X3N0YXR1cygp
+ICAgICAgICAgICAgY3VycmVudF9tb2RlID0gc2VsZi5zdGF0dXNfbWFuYWdlci5zdGF0dXNfbW9kZXNbc2VsZi5zdGF0dXNfbWFuYWdlci5jdXJyZW50X21vZGVfaW5kZXhd
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5jaGFuZ2VfcHJlc2VuY2UoYWN0aXZpdHk9YWN0aXZpdHksIHN0YXR1cz1jdXJyZW50X21vZGUp
+ICAgIA==
+ICAgIEB0YXNrcy5sb29wKHNlY29uZHM9MTAp
+ICAgIGFzeW5jIGRlZiByb3RhdGVfc3RhdHVzX21vZGUoc2VsZik6
+ICAgICAgICBpZiBzZWxmLmlzX3JlYWR5KCk6
+ICAgICAgICAgICAgbmV3X21vZGUgPSBzZWxmLnN0YXR1c19tYW5hZ2VyLmdldF9uZXh0X21vZGUoKQ==
+ICAgICAgICAgICAgYWN0aXZpdHkgPSBkaXNjb3JkLkdhbWUobmFtZT1zZWxmLnN0YXR1c19tYW5hZ2VyLnN0YXR1c2VzW3NlbGYuc3RhdHVzX21hbmFnZXIuY3VycmVudF9zdGF0dXNfaW5kZXhdKQ==
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5jaGFuZ2VfcHJlc2VuY2UoYWN0aXZpdHk9YWN0aXZpdHksIHN0YXR1cz1uZXdfbW9kZSk=
+ICAgIA==
+ICAgIGFzeW5jIGRlZiBsb2dfY29tbWFuZChzZWxmLCBpbnRlcmFjdGlvbjogZGlzY29yZC5JbnRlcmFjdGlvbiwgY29tbWFuZF9uYW1lOiBzdHIsIGFyZ3M6IGRpY3QgPSBOb25lKTo=
+ICAgICAgICAiIiJMb2cgY29tbWFuZCB1c2FnZSB0byB0aGUgbG9nZ2luZyBjaGFubmVsIiIi
+ICAgICAgICB0cnk6
+ICAgICAgICAgICAgaWYgbm90IHNlbGYubG9nX2NoYW5uZWw6
+ICAgICAgICAgICAgICAgICMgR2V0IHRoZSBsb2dnaW5nIGNoYW5uZWw=
+ICAgICAgICAgICAgICAgIGxvZ19zZXJ2ZXIgPSBzZWxmLmdldF9ndWlsZChDb25maWcuTE9HX1NFUlZFUl9JRCk=
+ICAgICAgICAgICAgICAgIGlmIGxvZ19zZXJ2ZXI6
+ICAgICAgICAgICAgICAgICAgICBzZWxmLmxvZ19jaGFubmVsID0gbG9nX3NlcnZlci5nZXRfY2hhbm5lbChDb25maWcuTE9HX0NIQU5ORUxfSUQp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgaWYgc2VsZi5sb2dfY2hhbm5lbDo=
+ICAgICAgICAgICAgICAgIGVtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i8J+TnSBDb21tYW5kIEV4ZWN1dGVkIiw=
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj0weDM0OThkYiw=
+ICAgICAgICAgICAgICAgICAgICB0aW1lc3RhbXA9ZGF0ZXRpbWUudXRjbm93KCk=
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGVtYmVkLmFkZF9maWVsZChuYW1lPSLwn5GkIFVzZXIiLCB2YWx1ZT1mIntpbnRlcmFjdGlvbi51c2VyLm1lbnRpb259XG5JRDoge2ludGVyYWN0aW9uLnVzZXIuaWR9IiwgaW5saW5lPVRydWUp
+ICAgICAgICAgICAgICAgIGVtYmVkLmFkZF9maWVsZChuYW1lPSLwn4+377iPIENvbW1hbmQiLCB2YWx1ZT1mImAve2NvbW1hbmRfbmFtZX1gIiwgaW5saW5lPVRydWUp
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGlmIGludGVyYWN0aW9uLmd1aWxkOg==
+ICAgICAgICAgICAgICAgICAgICBlbWJlZC5hZGRfZmllbGQobmFtZT0i8J+boe+4jyBTZXJ2ZXIiLCB2YWx1ZT1mIntpbnRlcmFjdGlvbi5ndWlsZC5uYW1lfVxuSUQ6IHtpbnRlcmFjdGlvbi5ndWlsZC5pZH0iLCBpbmxpbmU9VHJ1ZSk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGlmIGFyZ3M6
+ICAgICAgICAgICAgICAgICAgICBhcmdzX3N0ciA9ICJcbiIuam9pbihbZiJge2t9YDoge3Z9IiBmb3IgaywgdiBpbiBhcmdzLml0ZW1zKCldKQ==
+ICAgICAgICAgICAgICAgICAgICBlbWJlZC5hZGRfZmllbGQobmFtZT0i8J+TiiBBcmd1bWVudHMiLCB2YWx1ZT1hcmdzX3N0cls6NTAwXSwgaW5saW5lPUZhbHNlKQ==
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGVtYmVkLmFkZF9maWVsZChuYW1lPSLwn5WQIFRpbWUiLCB2YWx1ZT1mIjx0OntpbnQoZGF0ZXRpbWUudXRjbm93KCkudGltZXN0YW1wKCkpfTpGPiIsIGlubGluZT1UcnVlKQ==
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGF3YWl0IHNlbGYubG9nX2NoYW5uZWwuc2VuZChlbWJlZD1lbWJlZCk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6
+ICAgICAgICAgICAgcHJpbnQoZiLimqDvuI8gRmFpbGVkIHRvIGxvZyBjb21tYW5kOiB7ZX0iKQ==
+ICAgIA==
+ICAgIGFzeW5jIGRlZiBmZXRjaF90ZXh0X2NvbnRlbnQoc2VsZiwgdXJsOiBzdHIpIC0+IHN0cjo=
+ICAgICAgICAiIiJGZXRjaCB0ZXh0IGNvbnRlbnQgZnJvbSBhIFVSTCIiIg==
+ICAgICAgICB0cnk6
+ICAgICAgICAgICAgYXN5bmMgd2l0aCBhaW9odHRwLkNsaWVudFNlc3Npb24oKSBhcyBzZXNzaW9uOg==
+ICAgICAgICAgICAgICAgIGFzeW5jIHdpdGggc2Vzc2lvbi5nZXQodXJsLCB0aW1lb3V0PTEwKSBhcyByZXNwb25zZTo=
+ICAgICAgICAgICAgICAgICAgICBpZiByZXNwb25zZS5zdGF0dXMgPT0gMjAwOg==
+ICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIGF3YWl0IHJlc3BvbnNlLnRleHQoKQ==
+ICAgICAgICAgICAgICAgICAgICBlbHNlOg==
+ICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIE5vbmU=
+ICAgICAgICBleGNlcHQ6
+ICAgICAgICAgICAgcmV0dXJuIE5vbmU=
+ICAgIA==
+ICAgIGFzeW5jIGRlZiBsb2FkX2NvbW1hbmRzKHNlbGYpOg==
+ICAgICAgICAiIiJMb2FkIGFsbCBib3QgY29tbWFuZHMiIiI=
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gUFJPSkVDVFMgQ09NTUFORCA9PT09PT09PT09
+ICAgICAgICA=
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0icHJvamVjdHMiLCBkZXNjcmlwdGlvbj0iQXF1YUZyb3N0J3MgUHJvamVjdHMgYW5kIHByb2plY3QgbGlua3MiKQ==
+ICAgICAgICBhc3luYyBkZWYgcHJvamVjdHMoaW50ZXJhY3Rpb246IGRpc2NvcmQuSW50ZXJhY3Rpb24pOg==
+ICAgICAgICAgICAgIiIiU2hvdyBBcXVhRnJvc3QgcHJvamVjdHMiIiI=
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2UuZGVmZXIoKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgInByb2plY3RzIik=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgdHJ5Og==
+ICAgICAgICAgICAgICAgICMgRmV0Y2ggcHJvamVjdHMgdGV4dA==
+ICAgICAgICAgICAgICAgIHByb2plY3RzX2NvbnRlbnQgPSBhd2FpdCBzZWxmLmZldGNoX3RleHRfY29udGVudChDb25maWcuUFJPSkVDVFNfVVJMKQ==
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGlmIHByb2plY3RzX2NvbnRlbnQ6
+ICAgICAgICAgICAgICAgICAgICAjIFNlbmQgdGhlIHJhdyB0ZXh0IGRpcmVjdGx5
+ICAgICAgICAgICAgICAgICAgICBhd2FpdCBpbnRlcmFjdGlvbi5mb2xsb3d1cC5zZW5kKGNvbnRlbnQ9cHJvamVjdHNfY29udGVudCk=
+ICAgICAgICAgICAgICAgIGVsc2U6
+ICAgICAgICAgICAgICAgICAgICBlbWJlZCA9IGRpc2NvcmQuRW1iZWQo
+ICAgICAgICAgICAgICAgICAgICAgICAgdGl0bGU9IuKdjCBDb3VsZCBOb3QgRmV0Y2ggUHJvamVjdHMiLA==
+ICAgICAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb249ZiJGYWlsZWQgdG8gZmV0Y2ggZnJvbTpcbmB7Q29uZmlnLlBST0pFQ1RTX1VSTH1gIiw=
+ICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9MHhGRjAwMDA=
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAgICAgICAgICBhd2FpdCBpbnRlcmFjdGlvbi5mb2xsb3d1cC5zZW5kKGVtYmVkPWVtYmVkKQ==
+ICAgICAgICAgICAgICAgICAgICA=
+ICAgICAgICAgICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOg==
+ICAgICAgICAgICAgICAgIGVtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i4p2MIEVycm9yIiw=
+ICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbj1mImBgYHtzdHIoZSlbOjIwMF19YGBgIiw=
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj0weEZGMDAwMA==
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIGF3YWl0IGludGVyYWN0aW9uLmZvbGxvd3VwLnNlbmQoZW1iZWQ9ZW1iZWQp
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gTU9EIERPV05MT0FEIENPTU1BTkQgPT09PT09PT09PQ==
+ICAgICAgICA=
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0ibW9kZGwiLCBkZXNjcmlwdGlvbj0iTWluZWNyYWZ0IE1vZCBEb3dubG9hZCBMaW5rIik=
+ICAgICAgICBhc3luYyBkZWYgbW9kZGwoaW50ZXJhY3Rpb246IGRpc2NvcmQuSW50ZXJhY3Rpb24pOg==
+ICAgICAgICAgICAgIiIiU2VuZCB0aGUgcmF3IHRleHQgZmlsZSBjb250ZW50IiIi
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2UuZGVmZXIoKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgIm1vZGRsIik=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgdHJ5Og==
+ICAgICAgICAgICAgICAgICMgRmV0Y2ggbW9kZGwgdGV4dA==
+ICAgICAgICAgICAgICAgIG1vZGRsX2NvbnRlbnQgPSBhd2FpdCBzZWxmLmZldGNoX3RleHRfY29udGVudChDb25maWcuTU9ERExfVVJMKQ==
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGlmIG1vZGRsX2NvbnRlbnQ6
+ICAgICAgICAgICAgICAgICAgICAjIFNlbmQgdGhlIHJhdyB0ZXh0IGRpcmVjdGx5
+ICAgICAgICAgICAgICAgICAgICBhd2FpdCBpbnRlcmFjdGlvbi5mb2xsb3d1cC5zZW5kKGNvbnRlbnQ9bW9kZGxfY29udGVudCk=
+ICAgICAgICAgICAgICAgIGVsc2U6
+ICAgICAgICAgICAgICAgICAgICBlbWJlZCA9IGRpc2NvcmQuRW1iZWQo
+ICAgICAgICAgICAgICAgICAgICAgICAgdGl0bGU9IuKdjCBEb3dubG9hZCBGYWlsZWQiLA==
+ICAgICAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb249ZiJGYWlsZWQgdG8gZmV0Y2ggZnJvbTpcbmB7Q29uZmlnLk1PRERMX1VSTH1gIiw=
+ICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9MHhGRjAwMDA=
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAgICAgICAgICBhd2FpdCBpbnRlcmFjdGlvbi5mb2xsb3d1cC5zZW5kKGVtYmVkPWVtYmVkKQ==
+ICAgICAgICAgICAgICAgICAgICA=
+ICAgICAgICAgICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOg==
+ICAgICAgICAgICAgICAgIGVtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i4p2MIEVycm9yIiw=
+ICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbj1mImBgYHtzdHIoZSlbOjIwMF19YGBgIiw=
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj0weEZGMDAwMA==
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIGF3YWl0IGludGVyYWN0aW9uLmZvbGxvd3VwLnNlbmQoZW1iZWQ9ZW1iZWQp
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gQVZBVEFSIENPTU1BTkQgPT09PT09PT09PQ==
+ICAgICAgICA=
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0iYXZhdGFyIiwgZGVzY3JpcHRpb249IkdldCBhIHVzZXIncyBhdmF0YXIiKQ==
+ICAgICAgICBAYXBwX2NvbW1hbmRzLmRlc2NyaWJlKHVzZXI9IlVzZXIgdG8gZ2V0IGF2YXRhciBmcm9tIChkZWZhdWx0cyB0byB5b3Vyc2VsZikiKQ==
+ICAgICAgICBhc3luYyBkZWYgYXZhdGFyKGludGVyYWN0aW9uOiBkaXNjb3JkLkludGVyYWN0aW9uLCB1c2VyOiBkaXNjb3JkLlVzZXIgPSBOb25lKTo=
+ICAgICAgICAgICAgIiIiR2V0IHVzZXIgYXZhdGFyIiIi
+ICAgICAgICAgICAgIyBEZWZhdWx0IHRvIGNvbW1hbmQgdXNlciBpZiBubyB1c2VyIHNwZWNpZmllZA==
+ICAgICAgICAgICAgdGFyZ2V0X3VzZXIgPSB1c2VyIG9yIGludGVyYWN0aW9uLnVzZXI=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXJncyA9IHsidXNlciI6IGYie3RhcmdldF91c2VyLm5hbWV9ICh7dGFyZ2V0X3VzZXIuaWR9KSJ9IGlmIHVzZXIgZWxzZSB7fQ==
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgImF2YXRhciIsIGFyZ3Mp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBHZXQgYWxsIGF2YXRhciBzaXplcw==
+ICAgICAgICAgICAgYXZhdGFyX3VybCA9IHRhcmdldF91c2VyLmRpc3BsYXlfYXZhdGFyLnVybA==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBDcmVhdGUgZW1iZWQgd2l0aCBhdmF0YXI=
+ICAgICAgICAgICAgZW1iZWQgPSBkaXNjb3JkLkVtYmVkKA==
+ICAgICAgICAgICAgICAgIHRpdGxlPWYi8J+RpCB7dGFyZ2V0X3VzZXIubmFtZX0ncyBBdmF0YXIiLA==
+ICAgICAgICAgICAgICAgIGNvbG9yPUNvbmZpZy5ERUZBVUxUX0NPTE9SLA==
+ICAgICAgICAgICAgICAgIHRpbWVzdGFtcD1kYXRldGltZS51dGNub3coKQ==
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBTZXQgdGhlIGF2YXRhciBhcyB0aGUgbWFpbiBpbWFnZQ==
+ICAgICAgICAgICAgZW1iZWQuc2V0X2ltYWdlKHVybD1hdmF0YXJfdXJsKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBZGQgZG93bmxvYWQgbGlua3MgZm9yIGRpZmZlcmVudCBzaXplcw==
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKA==
+ICAgICAgICAgICAgICAgIG5hbWU9IvCfk6UgRG93bmxvYWQgTGlua3MiLA==
+ICAgICAgICAgICAgICAgIHZhbHVlPWYiWzI1NnB4XSh7YXZhdGFyX3VybC5yZXBsYWNlKCc/c2l6ZT0xMDI0JywgJz9zaXplPTI1NicpfSkgfCAi
+ICAgICAgICAgICAgICAgICAgICAgIGYiWzUxMnB4XSh7YXZhdGFyX3VybC5yZXBsYWNlKCc/c2l6ZT0xMDI0JywgJz9zaXplPTUxMicpfSkgfCAi
+ICAgICAgICAgICAgICAgICAgICAgIGYiWzEwMjRweF0oe2F2YXRhcl91cmx9KSB8ICI=
+ICAgICAgICAgICAgICAgICAgICAgIGYiWzIwNDhweF0oe2F2YXRhcl91cmwucmVwbGFjZSgnP3NpemU9MTAyNCcsICc/c2l6ZT0yMDQ4Jyl9KSIs
+ICAgICAgICAgICAgICAgIGlubGluZT1GYWxzZQ==
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBZGQgdXNlciBpbmZv
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKA==
+ICAgICAgICAgICAgICAgIG5hbWU9IvCfkaQgVXNlciBJbmZvIiw=
+ICAgICAgICAgICAgICAgIHZhbHVlPWYiKipOYW1lOioqIHt0YXJnZXRfdXNlci5tZW50aW9ufVxuIg==
+ICAgICAgICAgICAgICAgICAgICAgIGYiKipJRDoqKiBge3RhcmdldF91c2VyLmlkfWBcbiI=
+ICAgICAgICAgICAgICAgICAgICAgIGYiKipBY2NvdW50IENyZWF0ZWQ6KiogPHQ6e2ludCh0YXJnZXRfdXNlci5jcmVhdGVkX2F0LnRpbWVzdGFtcCgpKX06Uj4iLA==
+ICAgICAgICAgICAgICAgIGlubGluZT1UcnVl
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBZGQgc2VydmVyIGpvaW4gZGF0ZSBpZiBhcHBsaWNhYmxl
+ICAgICAgICAgICAgaWYgaW50ZXJhY3Rpb24uZ3VpbGQgYW5kIHRhcmdldF91c2VyIGluIGludGVyYWN0aW9uLmd1aWxkLm1lbWJlcnM6
+ICAgICAgICAgICAgICAgIG1lbWJlciA9IGludGVyYWN0aW9uLmd1aWxkLmdldF9tZW1iZXIodGFyZ2V0X3VzZXIuaWQp
+ICAgICAgICAgICAgICAgIGlmIG1lbWJlciBhbmQgbWVtYmVyLmpvaW5lZF9hdDo=
+ICAgICAgICAgICAgICAgICAgICBlbWJlZC5hZGRfZmllbGQo
+ICAgICAgICAgICAgICAgICAgICAgICAgbmFtZT0i8J+boe+4jyBTZXJ2ZXIgSW5mbyIs
+ICAgICAgICAgICAgICAgICAgICAgICAgdmFsdWU9ZiIqKkpvaW5lZDoqKiA8dDp7aW50KG1lbWJlci5qb2luZWRfYXQudGltZXN0YW1wKCkpfTpSPlxuIg==
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZiIqKlJvbGVzOioqIHtsZW4obWVtYmVyLnJvbGVzKSAtIDF9Iiw=
+ICAgICAgICAgICAgICAgICAgICAgICAgaW5saW5lPVRydWU=
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuc2V0X2Zvb3Rlcih0ZXh0PWYiUmVxdWVzdGVkIGJ5IHtpbnRlcmFjdGlvbi51c2VyLm5hbWV9Iik=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2Uuc2VuZF9tZXNzYWdlKGVtYmVkPWVtYmVkKQ==
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gOEJBTEwgQ09NTUFORCA9PT09PT09PT09
+ICAgICAgICA=
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0iOGJhbGwiLCBkZXNjcmlwdGlvbj0iQXNrIHRoZSBtYWdpYyA4LWJhbGwgYSBxdWVzdGlvbiIp
+ICAgICAgICBAYXBwX2NvbW1hbmRzLmRlc2NyaWJlKHF1ZXN0aW9uPSJZb3VyIHF1ZXN0aW9uIGZvciB0aGUgbWFnaWMgOC1iYWxsIik=
+ICAgICAgICBhc3luYyBkZWYgZWlnaHRiYWxsKGludGVyYWN0aW9uOiBkaXNjb3JkLkludGVyYWN0aW9uLCBxdWVzdGlvbjogc3RyKTo=
+ICAgICAgICAgICAgIiIiTWFnaWMgOC1iYWxsIGNvbW1hbmQiIiI=
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgIjhiYWxsIiwgeyJxdWVzdGlvbiI6IHF1ZXN0aW9uWzoxMDBdfSk=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBHZXQgcmFuZG9tIHJlc3BvbnNl
+ICAgICAgICAgICAgcmVzcG9uc2UgPSByYW5kb20uY2hvaWNlKENvbmZpZy5FSUdIVEJBTExfUkVTUE9OU0VTKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBEZXRlcm1pbmUgY29sb3IgYmFzZWQgb24gcmVzcG9uc2UgdHlwZQ==
+ICAgICAgICAgICAgcG9zaXRpdmVfcmVzcG9uc2VzID0gWyJ5ZXMiLCAiY2VydGFpbiIsICJnb29kIiwgInJlbHkiLCAiZG91YnQiLCAibGlrZWx5Il0=
+ICAgICAgICAgICAgbmVnYXRpdmVfcmVzcG9uc2VzID0gWyJubyIsICJub3QiLCAiZG91YnRmdWwiLCAidW5saWtlbHkiXQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgcmVzcG9uc2VfbG93ZXIgPSByZXNwb25zZS5sb3dlcigp
+ICAgICAgICAgICAgY29sb3IgPSAweDAwRkYwMCAgIyBEZWZhdWx0IGdyZWVu
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgaWYgYW55KHdvcmQgaW4gcmVzcG9uc2VfbG93ZXIgZm9yIHdvcmQgaW4gbmVnYXRpdmVfcmVzcG9uc2VzKTo=
+ICAgICAgICAgICAgICAgIGNvbG9yID0gMHhGRjAwMDAgICMgUmVkIGZvciBuZWdhdGl2ZQ==
+ICAgICAgICAgICAgZWxpZiBhbnkod29yZCBpbiByZXNwb25zZV9sb3dlciBmb3Igd29yZCBpbiBwb3NpdGl2ZV9yZXNwb25zZXMpOg==
+ICAgICAgICAgICAgICAgIGNvbG9yID0gMHgwMEZGMDAgICMgR3JlZW4gZm9yIHBvc2l0aXZl
+ICAgICAgICAgICAgZWxzZTo=
+ICAgICAgICAgICAgICAgIGNvbG9yID0gMHhGRkZGMDAgICMgWWVsbG93IGZvciBuZXV0cmFs
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBDcmVhdGUgZW1iZWQ=
+ICAgICAgICAgICAgZW1iZWQgPSBkaXNjb3JkLkVtYmVkKA==
+ICAgICAgICAgICAgICAgIHRpdGxlPSLwn46xIFRoZSBNYWdpYyA4LUJhbGwiLA==
+ICAgICAgICAgICAgICAgIGNvbG9yPWNvbG9yLA==
+ICAgICAgICAgICAgICAgIHRpbWVzdGFtcD1kYXRldGltZS51dGNub3coKQ==
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IuKdkyBZb3VyIFF1ZXN0aW9uIiwgdmFsdWU9ZiJgYGB7cXVlc3Rpb259YGBgIiwgaW5saW5lPUZhbHNlKQ==
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IvCfjq8gQW5zd2VyIiwgdmFsdWU9ZiIqKntyZXNwb25zZX0qKiIsIGlubGluZT1GYWxzZSk=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBZGQgZnVuIGVtb2ppIGJhc2VkIG9uIHJlc3BvbnNl
+ICAgICAgICAgICAgaWYgInllcyIgaW4gcmVzcG9uc2VfbG93ZXIgb3IgImNlcnRhaW4iIGluIHJlc3BvbnNlX2xvd2VyOg==
+ICAgICAgICAgICAgICAgIGVtb2ppID0gIuKchSI=
+ICAgICAgICAgICAgZWxpZiAibm8iIGluIHJlc3BvbnNlX2xvd2VyIG9yICJub3QiIGluIHJlc3BvbnNlX2xvd2VyOg==
+ICAgICAgICAgICAgICAgIGVtb2ppID0gIuKdjCI=
+ICAgICAgICAgICAgZWxpZiAibWF5YmUiIGluIHJlc3BvbnNlX2xvd2VyIG9yICJsYXRlciIgaW4gcmVzcG9uc2VfbG93ZXI6
+ICAgICAgICAgICAgICAgIGVtb2ppID0gIvCfpJQi
+ICAgICAgICAgICAgZWxzZTo=
+ICAgICAgICAgICAgICAgIGVtb2ppID0gIvCfjrEi
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuc2V0X2Zvb3Rlcih0ZXh0PWYie2Vtb2ppfSBBc2tlZCBieSB7aW50ZXJhY3Rpb24udXNlci5uYW1lfSIp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2Uuc2VuZF9tZXNzYWdlKGVtYmVkPWVtYmVkKQ==
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gTkVXOiBVUFRJTUUgQ09NTUFORCA9PT09PT09PT09
+ICAgICAgICA=
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0idXB0aW1lIiwgZGVzY3JpcHRpb249IkNoZWNrIGhvdyBsb25nIHRoZSBib3QgaGFzIGJlZW4gb25saW5lIik=
+ICAgICAgICBhc3luYyBkZWYgdXB0aW1lKGludGVyYWN0aW9uOiBkaXNjb3JkLkludGVyYWN0aW9uKTo=
+ICAgICAgICAgICAgIiIiU2hvdyBib3QgdXB0aW1lIiIi
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgInVwdGltZSIp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgdXB0aW1lID0gZGF0ZXRpbWUudXRjbm93KCkgLSBzZWxmLnN0YXJ0X3RpbWU=
+ICAgICAgICAgICAgZGF5cyA9IHVwdGltZS5kYXlz
+ICAgICAgICAgICAgaG91cnMsIHJlbWFpbmRlciA9IGRpdm1vZCh1cHRpbWUuc2Vjb25kcywgMzYwMCk=
+ICAgICAgICAgICAgbWludXRlcywgc2Vjb25kcyA9IGRpdm1vZChyZW1haW5kZXIsIDYwKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBGb3JtYXQgdXB0aW1lIHN0cmluZw==
+ICAgICAgICAgICAgaWYgZGF5cyA+IDA6
+ICAgICAgICAgICAgICAgIHVwdGltZV9zdHIgPSBmIntkYXlzfWQge2hvdXJzfWgge21pbnV0ZXN9bSB7c2Vjb25kc31zIg==
+ICAgICAgICAgICAgZWxpZiBob3VycyA+IDA6
+ICAgICAgICAgICAgICAgIHVwdGltZV9zdHIgPSBmIntob3Vyc31oIHttaW51dGVzfW0ge3NlY29uZHN9cyI=
+ICAgICAgICAgICAgZWxpZiBtaW51dGVzID4gMDo=
+ICAgICAgICAgICAgICAgIHVwdGltZV9zdHIgPSBmInttaW51dGVzfW0ge3NlY29uZHN9cyI=
+ICAgICAgICAgICAgZWxzZTo=
+ICAgICAgICAgICAgICAgIHVwdGltZV9zdHIgPSBmIntzZWNvbmRzfXMi
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBDcmVhdGUgZW1iZWQ=
+ICAgICAgICAgICAgZW1iZWQgPSBkaXNjb3JkLkVtYmVkKA==
+ICAgICAgICAgICAgICAgIHRpdGxlPSLij7HvuI8gQm90IFVwdGltZSIs
+ICAgICAgICAgICAgICAgIGNvbG9yPUNvbmZpZy5ERUZBVUxUX0NPTE9SLA==
+ICAgICAgICAgICAgICAgIHRpbWVzdGFtcD1kYXRldGltZS51dGNub3coKQ==
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKA==
+ICAgICAgICAgICAgICAgIG5hbWU9IvCfk4UgU3RhcnQgVGltZSIs
+ICAgICAgICAgICAgICAgIHZhbHVlPWYiPHQ6e2ludChzZWxmLnN0YXJ0X3RpbWUudGltZXN0YW1wKCkpfTpGPlxuKDx0OntpbnQoc2VsZi5zdGFydF90aW1lLnRpbWVzdGFtcCgpKX06Uj4pIiw=
+ICAgICAgICAgICAgICAgIGlubGluZT1UcnVl
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKA==
+ICAgICAgICAgICAgICAgIG5hbWU9IuKPsyBDdXJyZW50IFVwdGltZSIs
+ICAgICAgICAgICAgICAgIHZhbHVlPWYiKip7dXB0aW1lX3N0cn0qKiIs
+ICAgICAgICAgICAgICAgIGlubGluZT1UcnVl
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKA==
+ICAgICAgICAgICAgICAgIG5hbWU9IvCflIQgU3RhdHVzIiw=
+ICAgICAgICAgICAgICAgIHZhbHVlPWYiUGxheWluZzogRXZlcnkgNXNcbk1vZGU6IEV2ZXJ5IDEwcyIs
+ICAgICAgICAgICAgICAgIGlubGluZT1GYWxzZQ==
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBZGQgY3VycmVudCBhY3Rpdml0eQ==
+ICAgICAgICAgICAgY3VycmVudF9jbGllbnQgPSBzZWxmLnN0YXR1c19tYW5hZ2VyLnN0YXR1c2VzW3NlbGYuc3RhdHVzX21hbmFnZXIuY3VycmVudF9zdGF0dXNfaW5kZXhd
+ICAgICAgICAgICAgY3VycmVudF9tb2RlID0gc2VsZi5zdGF0dXNfbWFuYWdlci5zdGF0dXNfbW9kZXNbc2VsZi5zdGF0dXNfbWFuYWdlci5jdXJyZW50X21vZGVfaW5kZXhd
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgbW9kZV9lbW9qaSA9IHs=
+ICAgICAgICAgICAgICAgIGRpc2NvcmQuU3RhdHVzLm9ubGluZTogIvCfn6IiLA==
+ICAgICAgICAgICAgICAgIGRpc2NvcmQuU3RhdHVzLmlkbGU6ICLwn4yZIiw=
+ICAgICAgICAgICAgICAgIGRpc2NvcmQuU3RhdHVzLmRuZDogIuKblCI=
+ICAgICAgICAgICAgfQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKA==
+ICAgICAgICAgICAgICAgIG5hbWU9IvCfjq4gQ3VycmVudCBBY3Rpdml0eSIs
+ICAgICAgICAgICAgICAgIHZhbHVlPWYie21vZGVfZW1vamkuZ2V0KGN1cnJlbnRfbW9kZSwgJ+KaqicpfSBQbGF5aW5nICoqe2N1cnJlbnRfY2xpZW50fSoqIiw=
+ICAgICAgICAgICAgICAgIGlubGluZT1UcnVl
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuc2V0X2Zvb3Rlcih0ZXh0PWYiQm90IHN0YXJ0ZWQgYnkge3NlbGYudXNlci5uYW1lfSIp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2Uuc2VuZF9tZXNzYWdlKGVtYmVkPWVtYmVkKQ==
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gTkVXOiBSRUZSRVNIIENPTU1BTkQgKEFETUlOIE9OTFkpID09PT09PT09PT0=
+ICAgICAgICA=
+ICAgICAgICBAYXBwX2NvbW1hbmRzLmNoZWNrcy5oYXNfcGVybWlzc2lvbnMoYWRtaW5pc3RyYXRvcj1UcnVlKQ==
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0icmVmcmVzaCIsIGRlc2NyaXB0aW9uPSJbQURNSU5dIFJlZnJlc2ggYm90IGNvbW1hbmRzIik=
+ICAgICAgICBhc3luYyBkZWYgcmVmcmVzaChpbnRlcmFjdGlvbjogZGlzY29yZC5JbnRlcmFjdGlvbik6
+ICAgICAgICAgICAgIiIiUmVmcmVzaCBib3QgY29tbWFuZHMgKEFkbWluIG9ubHkpIiIi
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2UuZGVmZXIoZXBoZW1lcmFsPVRydWUp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgInJlZnJlc2giKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgdHJ5Og==
+ICAgICAgICAgICAgICAgICMgUmVsb2FkIGNvbW1hbmRz
+ICAgICAgICAgICAgICAgIGF3YWl0IHNlbGYubG9hZF9jb21tYW5kcygp
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgU3luYyB0cmVl
+ICAgICAgICAgICAgICAgIHN5bmNlZCA9IGF3YWl0IHNlbGYudHJlZS5zeW5jKCk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGVtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i8J+UhCBDb21tYW5kcyBSZWZyZXNoZWQiLA==
+ICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbj1mIuKchSBTdWNjZXNzZnVsbHkgc3luY2VkICoqe2xlbihzeW5jZWQpfSoqIGNvbW1hbmRzIiw=
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj0weDAwRkYwMA==
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgTGlzdCBhbGwgY29tbWFuZHM=
+ICAgICAgICAgICAgICAgIGNvbW1hbmRfbGlzdCA9IFtd
+ICAgICAgICAgICAgICAgIGZvciBjbWQgaW4gc2VsZi50cmVlLmdldF9jb21tYW5kcygpOg==
+ICAgICAgICAgICAgICAgICAgICBjb21tYW5kX2xpc3QuYXBwZW5kKGYi4oCiIGAve2NtZC5uYW1lfWAgLSB7Y21kLmRlc2NyaXB0aW9ufSIp
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGlmIGNvbW1hbmRfbGlzdDo=
+ICAgICAgICAgICAgICAgICAgICBlbWJlZC5hZGRfZmllbGQo
+ICAgICAgICAgICAgICAgICAgICAgICAgbmFtZT0i8J+TiyBBdmFpbGFibGUgQ29tbWFuZHMiLA==
+ICAgICAgICAgICAgICAgICAgICAgICAgdmFsdWU9IlxuIi5qb2luKGNvbW1hbmRfbGlzdFs6MTVdKSw=
+ICAgICAgICAgICAgICAgICAgICAgICAgaW5saW5lPUZhbHNl
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGF3YWl0IGludGVyYWN0aW9uLmZvbGxvd3VwLnNlbmQoZW1iZWQ9ZW1iZWQsIGVwaGVtZXJhbD1UcnVlKQ==
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgQWxzbyBzZW5kIHRvIGxvZyBjaGFubmVs
+ICAgICAgICAgICAgICAgIGlmIHNlbGYubG9nX2NoYW5uZWw6
+ICAgICAgICAgICAgICAgICAgICBsb2dfZW1iZWQgPSBkaXNjb3JkLkVtYmVkKA==
+ICAgICAgICAgICAgICAgICAgICAgICAgdGl0bGU9IvCflIQgQ29tbWFuZHMgUmVmcmVzaGVkIGJ5IEFkbWluIiw=
+ICAgICAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb249ZiIqKkFkbWluOioqIHtpbnRlcmFjdGlvbi51c2VyLm1lbnRpb259XG4qKkNvbW1hbmRzOioqIHtsZW4oc3luY2VkKX0gc3luY2VkIiw=
+ICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9MHgzNDk4ZGIs
+ICAgICAgICAgICAgICAgICAgICAgICAgdGltZXN0YW1wPWRhdGV0aW1lLnV0Y25vdygp
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAgICAgICAgICBhd2FpdCBzZWxmLmxvZ19jaGFubmVsLnNlbmQoZW1iZWQ9bG9nX2VtYmVkKQ==
+ICAgICAgICAgICAgICAgICAgICA=
+ICAgICAgICAgICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOg==
+ICAgICAgICAgICAgICAgIGVycm9yX2VtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i4p2MIFJlZnJlc2ggRmFpbGVkIiw=
+ICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbj1mImBgYHtzdHIoZSlbOjIwMF19YGBgIiw=
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj0weEZGMDAwMA==
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIGF3YWl0IGludGVyYWN0aW9uLmZvbGxvd3VwLnNlbmQoZW1iZWQ9ZXJyb3JfZW1iZWQsIGVwaGVtZXJhbD1UcnVlKQ==
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gTkVXOiBTQVkgQ09NTUFORCAoQURNSU4gT05MWSkgPT09PT09PT09PQ==
+ICAgICAgICA=
+ICAgICAgICBAYXBwX2NvbW1hbmRzLmNoZWNrcy5oYXNfcGVybWlzc2lvbnMoYWRtaW5pc3RyYXRvcj1UcnVlKQ==
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0ic2F5IiwgZGVzY3JpcHRpb249IltBRE1JTl0gTWFrZSB0aGUgYm90IHNheSBzb21ldGhpbmciKQ==
+ICAgICAgICBAYXBwX2NvbW1hbmRzLmRlc2NyaWJlKA==
+ICAgICAgICAgICAgbWVzc2FnZT0iTWVzc2FnZSB0byBzZW5kIiw=
+ICAgICAgICAgICAgY2hhbm5lbD0iQ2hhbm5lbCB0byBzZW5kIHRvIChkZWZhdWx0cyB0byBjdXJyZW50KSI=
+ICAgICAgICAp
+ICAgICAgICBhc3luYyBkZWYgc2F5KGludGVyYWN0aW9uOiBkaXNjb3JkLkludGVyYWN0aW9uLCBtZXNzYWdlOiBzdHIsIGNoYW5uZWw6IGRpc2NvcmQuVGV4dENoYW5uZWwgPSBOb25lKTo=
+ICAgICAgICAgICAgIiIiTWFrZSB0aGUgYm90IHNheSBzb21ldGhpbmcgKEFkbWluIG9ubHkpIiIi
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2UuZGVmZXIoZXBoZW1lcmFsPVRydWUp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXJncyA9IHs=
+ICAgICAgICAgICAgICAgICJtZXNzYWdlIjogbWVzc2FnZVs6MTAwXSArICIuLi4iIGlmIGxlbihtZXNzYWdlKSA+IDEwMCBlbHNlIG1lc3NhZ2Us
+ICAgICAgICAgICAgICAgICJjaGFubmVsIjogY2hhbm5lbC5tZW50aW9uIGlmIGNoYW5uZWwgZWxzZSAiQ3VycmVudCI=
+ICAgICAgICAgICAgfQ==
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgInNheSIsIGFyZ3Mp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgdHJ5Og==
+ICAgICAgICAgICAgICAgICMgRGV0ZXJtaW5lIHRhcmdldCBjaGFubmVs
+ICAgICAgICAgICAgICAgIHRhcmdldF9jaGFubmVsID0gY2hhbm5lbCBvciBpbnRlcmFjdGlvbi5jaGFubmVs
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgQ2hlY2sgaWYgYm90IGhhcyBwZXJtaXNzaW9uIHRvIHNlbmQgbWVzc2FnZXM=
+ICAgICAgICAgICAgICAgIGlmIG5vdCB0YXJnZXRfY2hhbm5lbC5wZXJtaXNzaW9uc19mb3IoaW50ZXJhY3Rpb24uZ3VpbGQubWUpLnNlbmRfbWVzc2FnZXM6
+ICAgICAgICAgICAgICAgICAgICBlbWJlZCA9IGRpc2NvcmQuRW1iZWQo
+ICAgICAgICAgICAgICAgICAgICAgICAgdGl0bGU9IuKdjCBQZXJtaXNzaW9uIEVycm9yIiw=
+ICAgICAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb249ZiJJIGRvbid0IGhhdmUgcGVybWlzc2lvbiB0byBzZW5kIG1lc3NhZ2VzIGluIHt0YXJnZXRfY2hhbm5lbC5tZW50aW9ufSIs
+ICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9MHhGRjAwMDA=
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAgICAgICAgICBhd2FpdCBpbnRlcmFjdGlvbi5mb2xsb3d1cC5zZW5kKGVtYmVkPWVtYmVkLCBlcGhlbWVyYWw9VHJ1ZSk=
+ICAgICAgICAgICAgICAgICAgICByZXR1cm4=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgU2VuZCB0aGUgbWVzc2FnZQ==
+ICAgICAgICAgICAgICAgIGF3YWl0IHRhcmdldF9jaGFubmVsLnNlbmQobWVzc2FnZSk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgU2VuZCBjb25maXJtYXRpb24gdG8gYWRtaW4=
+ICAgICAgICAgICAgICAgIGVtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i4pyFIE1lc3NhZ2UgU2VudCIs
+ICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbj1mIk1lc3NhZ2Ugc2VudCB0byB7dGFyZ2V0X2NoYW5uZWwubWVudGlvbn0iLA==
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj0weDAwRkYwMA==
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIGVtYmVkLmFkZF9maWVsZChuYW1lPSLwn5OdIE1lc3NhZ2UiLCB2YWx1ZT1mImBgYHttZXNzYWdlWzo1MDBdfWBgYCIsIGlubGluZT1GYWxzZSk=
+ICAgICAgICAgICAgICAgIGF3YWl0IGludGVyYWN0aW9uLmZvbGxvd3VwLnNlbmQoZW1iZWQ9ZW1iZWQsIGVwaGVtZXJhbD1UcnVlKQ==
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOg==
+ICAgICAgICAgICAgICAgIGVycm9yX2VtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i4p2MIEZhaWxlZCB0byBTZW5kIE1lc3NhZ2UiLA==
+ICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbj1mImBgYHtzdHIoZSlbOjIwMF19YGBgIiw=
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj0weEZGMDAwMA==
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIGF3YWl0IGludGVyYWN0aW9uLmZvbGxvd3VwLnNlbmQoZW1iZWQ9ZXJyb3JfZW1iZWQsIGVwaGVtZXJhbD1UcnVlKQ==
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gTkVXOiBXRUJIT09LIFNBWSBDT01NQU5EIChBRE1JTiBPTkxZKSA9PT09PT09PT09
+ICAgICAgICA=
+ICAgICAgICBAYXBwX2NvbW1hbmRzLmNoZWNrcy5oYXNfcGVybWlzc2lvbnMoYWRtaW5pc3RyYXRvcj1UcnVlKQ==
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0id2ViaG9vay1zYXkiLCBkZXNjcmlwdGlvbj0iW0FETUlOXSBTZW5kIGEgbWVzc2FnZSB2aWEgd2ViaG9vayAoY29vbCBzdHlsZSkiKQ==
+ICAgICAgICBAYXBwX2NvbW1hbmRzLmRlc2NyaWJlKA==
+ICAgICAgICAgICAgbWVzc2FnZT0iTWVzc2FnZSB0byBzZW5kIiw=
+ICAgICAgICAgICAgdXNlcm5hbWU9IldlYmhvb2sgdXNlcm5hbWUgKGRlZmF1bHRzIHRvIGJvdCBuYW1lKSIs
+ICAgICAgICAgICAgY2hhbm5lbD0iQ2hhbm5lbCB0byBzZW5kIHRvIg==
+ICAgICAgICAp
+ICAgICAgICBhc3luYyBkZWYgd2ViaG9va19zYXkoaW50ZXJhY3Rpb246IGRpc2NvcmQuSW50ZXJhY3Rpb24sIG1lc3NhZ2U6IHN0ciwg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVzZXJuYW1lOiBzdHIgPSBOb25lLCBjaGFubmVsOiBkaXNjb3JkLlRleHRDaGFubmVsID0gTm9uZSk6
+ICAgICAgICAgICAgIiIiU2VuZCBtZXNzYWdlIHZpYSB3ZWJob29rIChBZG1pbiBvbmx5KSIiIg==
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2UuZGVmZXIoZXBoZW1lcmFsPVRydWUp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXJncyA9IHs=
+ICAgICAgICAgICAgICAgICJtZXNzYWdlIjogbWVzc2FnZVs6MTAwXSArICIuLi4iIGlmIGxlbihtZXNzYWdlKSA+IDEwMCBlbHNlIG1lc3NhZ2Us
+ICAgICAgICAgICAgICAgICJ1c2VybmFtZSI6IHVzZXJuYW1lIG9yICJEZWZhdWx0Iiw=
+ICAgICAgICAgICAgICAgICJjaGFubmVsIjogY2hhbm5lbC5tZW50aW9uIGlmIGNoYW5uZWwgZWxzZSAiQ3VycmVudCI=
+ICAgICAgICAgICAgfQ==
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgIndlYmhvb2stc2F5IiwgYXJncyk=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgdHJ5Og==
+ICAgICAgICAgICAgICAgICMgRGV0ZXJtaW5lIHRhcmdldCBjaGFubmVs
+ICAgICAgICAgICAgICAgIHRhcmdldF9jaGFubmVsID0gY2hhbm5lbCBvciBpbnRlcmFjdGlvbi5jaGFubmVs
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgQ2hlY2sgaWYgYm90IGhhcyBwZXJtaXNzaW9uIHRvIG1hbmFnZSB3ZWJob29rcw==
+ICAgICAgICAgICAgICAgIGlmIG5vdCB0YXJnZXRfY2hhbm5lbC5wZXJtaXNzaW9uc19mb3IoaW50ZXJhY3Rpb24uZ3VpbGQubWUpLm1hbmFnZV93ZWJob29rczo=
+ICAgICAgICAgICAgICAgICAgICBlbWJlZCA9IGRpc2NvcmQuRW1iZWQo
+ICAgICAgICAgICAgICAgICAgICAgICAgdGl0bGU9IuKdjCBQZXJtaXNzaW9uIEVycm9yIiw=
+ICAgICAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb249ZiJJIG5lZWQgKipNYW5hZ2UgV2ViaG9va3MqKiBwZXJtaXNzaW9uIGluIHt0YXJnZXRfY2hhbm5lbC5tZW50aW9ufSIs
+ICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9MHhGRjAwMDA=
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAgICAgICAgICBhd2FpdCBpbnRlcmFjdGlvbi5mb2xsb3d1cC5zZW5kKGVtYmVkPWVtYmVkLCBlcGhlbWVyYWw9VHJ1ZSk=
+ICAgICAgICAgICAgICAgICAgICByZXR1cm4=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgR2V0IG9yIGNyZWF0ZSB3ZWJob29r
+ICAgICAgICAgICAgICAgIHdlYmhvb2tzID0gYXdhaXQgdGFyZ2V0X2NoYW5uZWwud2ViaG9va3MoKQ==
+ICAgICAgICAgICAgICAgIHdlYmhvb2sgPSBOb25l
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgTG9vayBmb3IgZXhpc3RpbmcgYm90IHdlYmhvb2s=
+ICAgICAgICAgICAgICAgIGZvciB3aCBpbiB3ZWJob29rczo=
+ICAgICAgICAgICAgICAgICAgICBpZiB3aC51c2VyIGFuZCB3aC51c2VyLmlkID09IHNlbGYudXNlci5pZDo=
+ICAgICAgICAgICAgICAgICAgICAgICAgd2ViaG9vayA9IHdo
+ICAgICAgICAgICAgICAgICAgICAgICAgYnJlYWs=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgQ3JlYXRlIG5ldyB3ZWJob29rIGlmIG5vbmUgZXhpc3Rz
+ICAgICAgICAgICAgICAgIGlmIG5vdCB3ZWJob29rOg==
+ICAgICAgICAgICAgICAgICAgICB3ZWJob29rID0gYXdhaXQgdGFyZ2V0X2NoYW5uZWwuY3JlYXRlX3dlYmhvb2so
+ICAgICAgICAgICAgICAgICAgICAgICAgbmFtZT0iQXF1YUZyb3N0IEJvdCIs
+ICAgICAgICAgICAgICAgICAgICAgICAgcmVhc29uPSJDcmVhdGVkIGZvciB3ZWJob29rLXNheSBjb21tYW5kIg==
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgU2V0IGRlZmF1bHQgdXNlcm5hbWUgaWYgbm90IHByb3ZpZGVk
+ICAgICAgICAgICAgICAgIHdlYmhvb2tfdXNlcm5hbWUgPSB1c2VybmFtZSBvciBzZWxmLnVzZXIubmFtZQ==
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgU2VuZCBtZXNzYWdlIHZpYSB3ZWJob29r
+ICAgICAgICAgICAgICAgIGF3YWl0IHdlYmhvb2suc2VuZCg=
+ICAgICAgICAgICAgICAgICAgICBjb250ZW50PW1lc3NhZ2Us
+ICAgICAgICAgICAgICAgICAgICB1c2VybmFtZT13ZWJob29rX3VzZXJuYW1lLA==
+ICAgICAgICAgICAgICAgICAgICBhdmF0YXJfdXJsPXNlbGYudXNlci5kaXNwbGF5X2F2YXRhci51cmws
+ICAgICAgICAgICAgICAgICAgICB3YWl0PVRydWU=
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgQ3JlYXRlIGNvbmZpcm1hdGlvbiBlbWJlZCB3aXRoIHdlYmhvb2sgY29sb3I=
+ICAgICAgICAgICAgICAgIGVtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i4pyFIFdlYmhvb2sgTWVzc2FnZSBTZW50Iiw=
+ICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbj1mIk1lc3NhZ2Ugc2VudCB2aWEgd2ViaG9vayB0byB7dGFyZ2V0X2NoYW5uZWwubWVudGlvbn0iLA==
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj1Db25maWcuV0VCSE9PS19DT0xPUiAgIyBVc2luZyB0aGUgc3BlY2lmaWVkIGNvbG9y
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGVtYmVkLmFkZF9maWVsZChuYW1lPSLwn5GkIFdlYmhvb2sgTmFtZSIsIHZhbHVlPWYiYHt3ZWJob29rX3VzZXJuYW1lfWAiLCBpbmxpbmU9VHJ1ZSk=
+ICAgICAgICAgICAgICAgIGVtYmVkLmFkZF9maWVsZChuYW1lPSLwn5SXIFdlYmhvb2sgVVJMIiwgdmFsdWU9ZiJge3dlYmhvb2sudXJsWzo1MF19Li4uYCIsIGlubGluZT1UcnVlKQ==
+ICAgICAgICAgICAgICAgIGVtYmVkLmFkZF9maWVsZChuYW1lPSLwn5OdIE1lc3NhZ2UiLCB2YWx1ZT1mImBgYHttZXNzYWdlWzozMDBdfWBgYCIsIGlubGluZT1GYWxzZSk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgICMgQWRkIHdlYmhvb2sgaW5mbw==
+ICAgICAgICAgICAgICAgIGVtYmVkLmFkZF9maWVsZCg=
+ICAgICAgICAgICAgICAgICAgICBuYW1lPSLwn5SEIFdlYmhvb2sgSW5mbyIs
+ICAgICAgICAgICAgICAgICAgICB2YWx1ZT1mIioqSUQ6KiogYHt3ZWJob29rLmlkfWBcbioqQ2hhbm5lbDoqKiB7d2ViaG9vay5jaGFubmVsLm1lbnRpb259XG4qKkNyZWF0ZWQ6KiogPHQ6e2ludCh3ZWJob29rLmNyZWF0ZWRfYXQudGltZXN0YW1wKCkpfTpSPiIs
+ICAgICAgICAgICAgICAgICAgICBpbmxpbmU9VHJ1ZQ==
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGVtYmVkLnNldF9mb290ZXIodGV4dD0iU2VudCB2aWEgd2ViaG9vayIp
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgICAgIGF3YWl0IGludGVyYWN0aW9uLmZvbGxvd3VwLnNlbmQoZW1iZWQ9ZW1iZWQsIGVwaGVtZXJhbD1UcnVlKQ==
+ICAgICAgICAgICAgICAgIA==
+ICAgICAgICAgICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOg==
+ICAgICAgICAgICAgICAgIGVycm9yX2VtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICB0aXRsZT0i4p2MIFdlYmhvb2sgRmFpbGVkIiw=
+ICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbj1mImBgYHtzdHIoZSlbOjIwMF19YGBgIiw=
+ICAgICAgICAgICAgICAgICAgICBjb2xvcj0weEZGMDAwMA==
+ICAgICAgICAgICAgICAgICk=
+ICAgICAgICAgICAgICAgIGF3YWl0IGludGVyYWN0aW9uLmZvbGxvd3VwLnNlbmQoZW1iZWQ9ZXJyb3JfZW1iZWQsIGVwaGVtZXJhbD1UcnVlKQ==
+ICAgICAgICA=
+ICAgICAgICAjID09PT09PT09PT0gVVRJTElUWSBDT01NQU5EUyA9PT09PT09PT09
+ICAgICAgICA=
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0icGluZyIsIGRlc2NyaXB0aW9uPSJDaGVjayBib3QgbGF0ZW5jeSIp
+ICAgICAgICBhc3luYyBkZWYgcGluZyhpbnRlcmFjdGlvbjogZGlzY29yZC5JbnRlcmFjdGlvbik6
+ICAgICAgICAgICAgIiIiQ2hlY2sgYm90IHBpbmciIiI=
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgInBpbmciKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgbGF0ZW5jeSA9IHJvdW5kKHNlbGYubGF0ZW5jeSAqIDEwMDAp
+ICAgICAgICAgICAgZW1iZWQgPSBkaXNjb3JkLkVtYmVkKA==
+ICAgICAgICAgICAgICAgIHRpdGxlPSLwn4+TIFBvbmchIiw=
+ICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uPWYiKipMYXRlbmN5OioqIHtsYXRlbmN5fW1zIiw=
+ICAgICAgICAgICAgICAgIGNvbG9yPUNvbmZpZy5ERUZBVUxUX0NPTE9S
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBZGQgdXB0aW1l
+ICAgICAgICAgICAgdXB0aW1lID0gZGF0ZXRpbWUudXRjbm93KCkgLSBzZWxmLnN0YXJ0X3RpbWU=
+ICAgICAgICAgICAgZGF5cyA9IHVwdGltZS5kYXlz
+ICAgICAgICAgICAgaG91cnMsIHJlbWFpbmRlciA9IGRpdm1vZCh1cHRpbWUuc2Vjb25kcywgMzYwMCk=
+ICAgICAgICAgICAgbWludXRlcywgc2Vjb25kcyA9IGRpdm1vZChyZW1haW5kZXIsIDYwKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgaWYgZGF5cyA+IDA6
+ICAgICAgICAgICAgICAgIHVwdGltZV9zdHIgPSBmIntkYXlzfWQge2hvdXJzfWgge21pbnV0ZXN9bSI=
+ICAgICAgICAgICAgZWxzZTo=
+ICAgICAgICAgICAgICAgIHVwdGltZV9zdHIgPSBmIntob3Vyc31oIHttaW51dGVzfW0ge3NlY29uZHN9cyI=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IuKPse+4jyBVcHRpbWUiLCB2YWx1ZT11cHRpbWVfc3RyLCBpbmxpbmU9VHJ1ZSk=
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IvCfk4ogU2VydmVycyIsIHZhbHVlPWxlbihzZWxmLmd1aWxkcyksIGlubGluZT1UcnVlKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBZGQgY3VycmVudCBzdGF0dXM=
+ICAgICAgICAgICAgY3VycmVudF9jbGllbnQgPSBzZWxmLnN0YXR1c19tYW5hZ2VyLnN0YXR1c2VzW3NlbGYuc3RhdHVzX21hbmFnZXIuY3VycmVudF9zdGF0dXNfaW5kZXhd
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IvCfjq4gU3RhdHVzIiwgdmFsdWU9ZiJQbGF5aW5nIHtjdXJyZW50X2NsaWVudH0iLCBpbmxpbmU9VHJ1ZSk=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2Uuc2VuZF9tZXNzYWdlKGVtYmVkPWVtYmVkKQ==
+ICAgICAgICA=
+ICAgICAgICBAc2VsZi50cmVlLmNvbW1hbmQobmFtZT0iaGVscCIsIGRlc2NyaXB0aW9uPSJTaG93IGFsbCBjb21tYW5kcyIp
+ICAgICAgICBhc3luYyBkZWYgaGVscF9jbWQoaW50ZXJhY3Rpb246IGRpc2NvcmQuSW50ZXJhY3Rpb24pOg==
+ICAgICAgICAgICAgIiIiU2hvdyBoZWxwIG1lbnUiIiI=
+ICAgICAgICAgICAgIyBMb2cgdGhlIGNvbW1hbmQ=
+ICAgICAgICAgICAgYXdhaXQgc2VsZi5sb2dfY29tbWFuZChpbnRlcmFjdGlvbiwgImhlbHAiKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQgPSBkaXNjb3JkLkVtYmVkKA==
+ICAgICAgICAgICAgICAgIHRpdGxlPSLwn5ug77iPIEFxdWFGcm9zdCBIZWxwIE1lbnUiLA==
+ICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uPSJNaW5lY3JhZnQgQ2xpZW50IERvd25sb2FkIEJvdCIs
+ICAgICAgICAgICAgICAgIGNvbG9yPUNvbmZpZy5ERUZBVUxUX0NPTE9S
+ICAgICAgICAgICAgKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgY29tbWFuZHNfbGlzdCA9ICIiIg==
+ICAgICAgICAgICAgKipgL3BpbmdgKio=
+ICAgICAgICAgICAgQ2hlY2sgYm90IGxhdGVuY3kgYW5kIHN0YXR1cw==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgKipgL3VwdGltZWAqKg==
+ICAgICAgICAgICAgQ2hlY2sgaG93IGxvbmcgdGhlIGJvdCBoYXMgYmVlbiBvbmxpbmU=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgKipgL3Byb2plY3RzYCoq
+ICAgICAgICAgICAgU2hvdyBBcXVhRnJvc3QncyBwcm9qZWN0cyBhbmQgbGlua3M=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgKipgL21vZGRsYCoq
+ICAgICAgICAgICAgR2V0IE1pbmVjcmFmdCBjbGllbnQgZG93bmxvYWQgbGlua3M=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgKipgL2F2YXRhciBbQHVzZXJdYCoq
+ICAgICAgICAgICAgR2V0IGEgdXNlcidzIGF2YXRhciB3aXRoIGRvd25sb2FkIGxpbmtz
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgKipgLzhiYWxsIFtxdWVzdGlvbl1gKio=
+ICAgICAgICAgICAgQXNrIHRoZSBtYWdpYyA4LWJhbGwgYSBxdWVzdGlvbg==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgKipgL2hlbHBgKio=
+ICAgICAgICAgICAgU2hvdyB0aGlzIG1lbnU=
+ICAgICAgICAgICAgIiIi
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IvCflKcgUHVibGljIENvbW1hbmRzIiwgdmFsdWU9Y29tbWFuZHNfbGlzdCwgaW5saW5lPUZhbHNlKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBZG1pbiBjb21tYW5kcyBzZWN0aW9u
+ICAgICAgICAgICAgYWRtaW5fY29tbWFuZHMgPSAiIiI=
+ICAgICAgICAgICAgKipgL3JlZnJlc2hgKiog4pqg77iP
+ICAgICAgICAgICAgUmVmcmVzaCBib3QgY29tbWFuZHMgKEFkbWluIG9ubHkp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgKipgL3NheSBbbWVzc2FnZV0gW2NoYW5uZWxdYCoqIOKaoO+4jw==
+ICAgICAgICAgICAgTWFrZSBib3Qgc2VuZCBhIG1lc3NhZ2UgKEFkbWluIG9ubHkp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgKipgL3dlYmhvb2stc2F5IFttZXNzYWdlXSBbdXNlcm5hbWVdIFtjaGFubmVsXWAqKiDimqDvuI8=
+ICAgICAgICAgICAgU2VuZCBtZXNzYWdlIHZpYSB3ZWJob29rIChBZG1pbiBvbmx5KQ==
+ICAgICAgICAgICAgIiIi
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IvCfm6HvuI8gQWRtaW4gQ29tbWFuZHMiLCB2YWx1ZT1hZG1pbl9jb21tYW5kcywgaW5saW5lPUZhbHNlKQ==
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBBdmFpbGFibGUgY2xpZW50cw==
+ICAgICAgICAgICAgY2xpZW50c19saXN0ID0gIiIi
+ICAgICAgICAgICAgKipBdmFpbGFibGUgQ2xpZW50czoqKg==
+ICAgICAgICAgICAg4oCiIEFxdWEgQ2xpZW50
+ICAgICAgICAgICAg4oCiIEFwcGxlIENsaWVudA==
+ICAgICAgICAgICAg4oCiIEpldCBDbGllbnQ=
+ICAgICAgICAgICAg4oCiIExvdXAgQ2xpZW50
+ICAgICAgICAgICAg4oCiIFVuaWZpeCBDbGllbnQ=
+ICAgICAgICAgICAgIiIi
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IvCfjq4gQ2xpZW50cyIsIHZhbHVlPWNsaWVudHNfbGlzdCwgaW5saW5lPVRydWUp
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIyBTdGF0dXMgaW5mbw==
+ICAgICAgICAgICAgc3RhdHVzX2luZm8gPSAiIiI=
+ICAgICAgICAgICAgKipTdGF0dXMgUm90YXRpb246Kio=
+ICAgICAgICAgICAg4oCiIFBsYXlpbmc6IEV2ZXJ5IDVz
+ICAgICAgICAgICAg4oCiIE9ubGluZS9JZGxlL0RORDogRXZlcnkgMTBz
+ICAgICAgICAgICAgIiIi
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuYWRkX2ZpZWxkKG5hbWU9IvCflIQgQm90IFN0YXR1cyIsIHZhbHVlPXN0YXR1c19pbmZvLCBpbmxpbmU9VHJ1ZSk=
+ICAgICAgICAgICAg
+ICAgICAgICAgICAgZW1iZWQuc2V0X2Zvb3Rlcih0ZXh0PSJCb3QgYnkgQXF1YUZyb3N0IFRlYW0gfCBBZG1pbiBjb21tYW5kcyBtYXJrZWQgd2l0aCDimqDvuI8iKQ==
+ICAgICAgICAgICAgYXdhaXQgaW50ZXJhY3Rpb24ucmVzcG9uc2Uuc2VuZF9tZXNzYWdlKGVtYmVkPWVtYmVkKQ==
+ICAgIA==
+ICAgIGFzeW5jIGRlZiBvbl9yZWFkeShzZWxmKTo=
+ICAgICAgICAiIiJDYWxsZWQgd2hlbiBib3QgaXMgcmVhZHkiIiI=
+ICAgICAgICBwcmludChmIlxu4pyFIExvZ2dlZCBpbiBhczoge3NlbGYudXNlcn0iKQ==
+ICAgICAgICBwcmludChmIvCfhpQgQm90IElEOiB7c2VsZi51c2VyLmlkfSIp
+ICAgICAgICBwcmludChmIvCfk4ogU2VydmVyczoge2xlbihzZWxmLmd1aWxkcyl9Iik=
+ICAgICAgICBwcmludChmIvCfkaUgVXNlcnM6IHtsZW4oc2VsZi51c2Vycyl9Iik=
+ICAgICAgICA=
+ICAgICAgICBwcmludChmIlxu8J+UhCBTdGF0dXMgUm90YXRpb24gQWN0aXZlIik=
+ICAgICAgICBwcmludChmIuKAoiBQbGF5aW5nOiBFdmVyeSA1IHNlY29uZHMiKQ==
+ICAgICAgICBwcmludChmIuKAoiBNb2RlOiBFdmVyeSAxMCBzZWNvbmRzIik=
+ICAgICAgICA=
+ICAgICAgICAjIFRyeSB0byBnZXQgbG9nZ2luZyBjaGFubmVs
+ICAgICAgICB0cnk6
+ICAgICAgICAgICAgbG9nX3NlcnZlciA9IHNlbGYuZ2V0X2d1aWxkKENvbmZpZy5MT0dfU0VSVkVSX0lEKQ==
+ICAgICAgICAgICAgaWYgbG9nX3NlcnZlcjo=
+ICAgICAgICAgICAgICAgIHNlbGYubG9nX2NoYW5uZWwgPSBsb2dfc2VydmVyLmdldF9jaGFubmVsKENvbmZpZy5MT0dfQ0hBTk5FTF9JRCk=
+ICAgICAgICAgICAgICAgIGlmIHNlbGYubG9nX2NoYW5uZWw6
+ICAgICAgICAgICAgICAgICAgICBwcmludChmIvCfk50gTG9nZ2luZyBDaGFubmVsOiAje3NlbGYubG9nX2NoYW5uZWwubmFtZX0gKElEOiB7c2VsZi5sb2dfY2hhbm5lbC5pZH0pIik=
+ICAgICAgICAgICAgICAgICAgICA=
+ICAgICAgICAgICAgICAgICAgICAjIFNlbmQgc3RhcnR1cCBsb2c=
+ICAgICAgICAgICAgICAgICAgICBzdGFydHVwX2VtYmVkID0gZGlzY29yZC5FbWJlZCg=
+ICAgICAgICAgICAgICAgICAgICAgICAgdGl0bGU9IvCfmoAgQm90IFN0YXJ0ZWQiLA==
+ICAgICAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb249ZiIqKkJvdDoqKiB7c2VsZi51c2VyLm5hbWV9XG4qKklEOioqIHtzZWxmLnVzZXIuaWR9Iiw=
+ICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9MHgwMEZGMDAs
+ICAgICAgICAgICAgICAgICAgICAgICAgdGltZXN0YW1wPWRhdGV0aW1lLnV0Y25vdygp
+ICAgICAgICAgICAgICAgICAgICAp
+ICAgICAgICAgICAgICAgICAgICBzdGFydHVwX2VtYmVkLmFkZF9maWVsZChuYW1lPSJTZXJ2ZXJzIiwgdmFsdWU9bGVuKHNlbGYuZ3VpbGRzKSwgaW5saW5lPVRydWUp
+ICAgICAgICAgICAgICAgICAgICBzdGFydHVwX2VtYmVkLmFkZF9maWVsZChuYW1lPSJVc2VycyIsIHZhbHVlPWxlbihzZWxmLnVzZXJzKSwgaW5saW5lPVRydWUp
+ICAgICAgICAgICAgICAgICAgICBzdGFydHVwX2VtYmVkLmFkZF9maWVsZChuYW1lPSJDb21tYW5kcyIsIHZhbHVlPSI5IGNvbW1hbmRzIGxvYWRlZCIsIGlubGluZT1UcnVlKQ==
+ICAgICAgICAgICAgICAgICAgICBzdGFydHVwX2VtYmVkLnNldF9mb290ZXIodGV4dD0iQ29tbWFuZCBsb2dnaW5nIGFjdGl2ZSIp
+ICAgICAgICAgICAgICAgICAgICA=
+ICAgICAgICAgICAgICAgICAgICBhd2FpdCBzZWxmLmxvZ19jaGFubmVsLnNlbmQoZW1iZWQ9c3RhcnR1cF9lbWJlZCk=
+ICAgICAgICAgICAgICAgIGVsc2U6
+ICAgICAgICAgICAgICAgICAgICBwcmludChmIuKaoO+4jyBMb2cgY2hhbm5lbCBub3QgZm91bmQ6IHtDb25maWcuTE9HX0NIQU5ORUxfSUR9Iik=
+ICAgICAgICAgICAgZWxzZTo=
+ICAgICAgICAgICAgICAgIHByaW50KGYi4pqg77iPIExvZyBzZXJ2ZXIgbm90IGZvdW5kOiB7Q29uZmlnLkxPR19TRVJWRVJfSUR9Iik=
+ICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6
+ICAgICAgICAgICAgcHJpbnQoZiLimqDvuI8gRmFpbGVkIHRvIHNldHVwIGxvZ2dpbmc6IHtlfSIp
+ICAgICAgICA=
+ICAgICAgICBwcmludCgiXG4iICsgIj0iICogNTAgKyAiXG4iKQ==
+ICAgICAgICA=
+ICAgICAgICAjIFN0YXJ0IHJvdGF0aW9uIHRhc2tz
+ICAgICAgICBzZWxmLnJvdGF0ZV9wbGF5aW5nX3N0YXR1cy5zdGFydCgp
+ICAgICAgICBzZWxmLnJvdGF0ZV9zdGF0dXNfbW9kZS5zdGFydCgp
 
-# ============================================
-# START THE BOT
-# ============================================
+IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ==
+IyBTVEFSVCBUSEUgQk9U
+IyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ==
 
-if __name__ == "__main__":
-    if not Config.TOKEN:
-        print("❌ ERROR: No Discord token found!")
-        print("Set environment variable: DISCORD_TOKEN=your_token")
-        sys.exit(1)
-    
-    bot = AquaFrost()
-    
-    try:
-        bot.run(Config.TOKEN)
-    except discord.LoginFailure:
-        print("❌ Invalid token!")
-        sys.exit(1)
-    except KeyboardInterrupt:
-        print("\n👋 Shutting down...")
-        sys.exit(0)
-    except Exception as e:
-        print(f"❌ Error: {e}")
-        sys.exit(1)
+aWYgX19uYW1lX18gPT0gIl9fbWFpbl9fIjo=
+ICAgIGlmIG5vdCBDb25maWcuVE9LRU46
+ICAgICAgICBwcmludCgi4p2MIEVSUk9SOiBObyBEaXNjb3JkIHRva2VuIGZvdW5kISIp
+ICAgICAgICBwcmludCgiU2V0IGVudmlyb25tZW50IHZhcmlhYmxlOiBESVNDT1JEX1RPS0VOPXlvdXJfdG9rZW4iKQ==
+ICAgICAgICBzeXMuZXhpdCgxKQ==
+ICAgIA==
+ICAgIGJvdCA9IEFxdWFGcm9zdCgp
+ICAgIA==
+ICAgIHRyeTo=
+ICAgICAgICBib3QucnVuKENvbmZpZy5UT0tFTik=
+ICAgIGV4Y2VwdCBkaXNjb3JkLkxvZ2luRmFpbHVyZTo=
+ICAgICAgICBwcmludCgi4p2MIEludmFsaWQgdG9rZW4hIik=
+ICAgICAgICBzeXMuZXhpdCgxKQ==
+ICAgIGV4Y2VwdCBLZXlib2FyZEludGVycnVwdDo=
+ICAgICAgICBwcmludCgiXG7wn5GLIFNodXR0aW5nIGRvd24uLi4iKQ==
+ICAgICAgICBzeXMuZXhpdCgwKQ==
+ICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZTo=
+ICAgICAgICBwcmludChmIuKdjCBFcnJvcjoge2V9Iik=
+ICAgICAgICBzeXMuZXhpdCgxKQ==
